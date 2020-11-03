@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"shisyan.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="hystrix是什么？Hystrix是一个用于处理分布式系统的延迟和容错的开源库，在分布式系统里，许多依赖不可避免的会调用失败，比如超时、异常等，Hystrix能够保证在一个依赖出问题的情况下，不会导致整体服务失败，避免级联故障，以提高分布式系统的弹性。 “断路器”本身是一种开关装置，当某个服务单元发生故障之后，通过断路器的故障监控（类似熔断保险丝），向调用方返回一个符合预期的、可处理的备选响应（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringCloud组件之hystrix（断路器）">
+<meta property="og:url" content="https://shisyan.com/2020/10/27/SpringCloud%E7%BB%84%E4%BB%B6%E4%B9%8Bhystrix%EF%BC%88%E6%96%AD%E8%B7%AF%E5%99%A8%EF%BC%89/index.html">
+<meta property="og:site_name" content="十三岩&#96;s 博客">
+<meta property="og:description" content="hystrix是什么？Hystrix是一个用于处理分布式系统的延迟和容错的开源库，在分布式系统里，许多依赖不可避免的会调用失败，比如超时、异常等，Hystrix能够保证在一个依赖出问题的情况下，不会导致整体服务失败，避免级联故障，以提高分布式系统的弹性。 “断路器”本身是一种开关装置，当某个服务单元发生故障之后，通过断路器的故障监控（类似熔断保险丝），向调用方返回一个符合预期的、可处理的备选响应（">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/10/27/3WKqAakGchQPv2D.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/27/OFtuQJ9UwK6ZS2Y.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/27/XEhzu6RljOSPHWx.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/27/ixrmdI4JkSDTsXY.png">
+<meta property="article:published_time" content="2020-10-27T08:06:15.000Z">
+<meta property="article:modified_time" content="2020-11-02T02:33:27.005Z">
+<meta property="article:author" content="十三岩">
+<meta property="article:tag" content="SpringCloud">
+<meta property="article:tag" content="Hystrix">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/27/3WKqAakGchQPv2D.png">
+
+<link rel="canonical" href="https://shisyan.com/2020/10/27/SpringCloud%E7%BB%84%E4%BB%B6%E4%B9%8Bhystrix%EF%BC%88%E6%96%AD%E8%B7%AF%E5%99%A8%EF%BC%89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SpringCloud组件之hystrix（断路器） | 十三岩`s 博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">十三岩`s 博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shisyan.com/2020/10/27/SpringCloud%E7%BB%84%E4%BB%B6%E4%B9%8Bhystrix%EF%BC%88%E6%96%AD%E8%B7%AF%E5%99%A8%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="十三岩">
+      <meta itemprop="description" content="学海无涯，回头是岸">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="十三岩`s 博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SpringCloud组件之hystrix（断路器）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-27 16:06:15" itemprop="dateCreated datePublished" datetime="2020-10-27T16:06:15+08:00">2020-10-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-02 10:33:27" itemprop="dateModified" datetime="2020-11-02T10:33:27+08:00">2020-11-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring%E5%BE%AE%E6%9C%8D%E5%8A%A1/" itemprop="url" rel="index"><span itemprop="name">Spring微服务</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="hystrix是什么？"><a href="#hystrix是什么？" class="headerlink" title="hystrix是什么？"></a>hystrix是什么？</h1><p>Hystrix是一个用于处理分布式系统的延迟和容错的开源库，在分布式系统里，许多依赖不可避免的会调用失败，比如超时、异常等，Hystrix能够保证在一个依赖出问题的情况下，不会导致整体服务失败，避免级联故障，以提高分布式系统的弹性。</p>
+<p>“断路器”本身是一种开关装置，当某个服务单元发生故障之后，通过断路器的故障监控（类似熔断保险丝），向调用方返回一个符合预期的、可处理的备选响应（FallBack），而不是长时间的等待或者抛出调用方无法处理的异常，这样就保证了服务调用方的线程不会被长时间、不必要地占用，从而避免了故障在分布式系统中的蔓延，乃至雪崩。</p>
+<h1 id="大型项目中会出现的一些问题"><a href="#大型项目中会出现的一些问题" class="headerlink" title="大型项目中会出现的一些问题"></a>大型项目中会出现的一些问题</h1><p>典型的一个案例就是服务血崩效应 我们来看一张图:  </p>
+<p><img data-src="https://i.loli.net/2020/10/27/3WKqAakGchQPv2D.png" alt="rfv.png">  </p>
+<p>上图是一条微服务调用链， 正常的情况我们就不必在讨论了， 我们来说一下非正常情况， 假设现在 微服务H 响应时间过长,或者微服务H直接down机了如图： </p>
+<p><img data-src="https://i.loli.net/2020/10/27/OFtuQJ9UwK6ZS2Y.png" alt="cvvb.png"></p>
+<p>来看下上图， 我们联想一下上图， 如果发生这种情况， 也就是说所有发给微服务D的请求 都会被卡在微服务H那， 就会导致线程一直累计在这里， 那么其他的微服务（比如A，B，C…） 就没有可用线程了， 导致整个服务器崩溃，这就是服务血崩。<br>导致服务雪崩的情况我们来总结一下，再看看怎么解决：<br>程序BUG，数据不匹配，响应时间过长，服务不可用等等…..<br>针对上面的问题，我们来看看有哪些解决方案：</p>
+<ol>
+<li>服务限流</li>
+<li>超时监控</li>
+<li>服务熔断</li>
+<li>服务降级</li>
+</ol>
+<h1 id="降级，超时"><a href="#降级，超时" class="headerlink" title="降级，超时"></a>降级，超时</h1><p>我们先来解释一下降级,降级是当我们的某个微服务响应时间过长，或者不可用了，讲白了也就是那个微服务调用不了了，我们不能吧错误信息返回出来，或者让他一直卡在那里，所以要在准备一个对应的策略（一个方法）当发生这种问题的时候我们直接调用这个方法来快速返回这个请求，不让他一直卡在那。</p>
+<p>讲了这么多,我们来看看具体怎么操作:</p>
+<p>我们刚刚说了某个微服务调用不了了要做降级，也就是说，要在调用方做降级（不然那个微服务都down掉了再做降级也没什么意义了） 比如说我们 user 调用power 那么就在user 做降级</p>
+<p>先把hystrix的依赖加入:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-hystrix<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>启动类加入注解<code>@EnableHystrix</code>或者<code>@EnableCircuitBreaker</code><br><em>他们之间是一个继承关系，2个注解所描述的内容是完全一样的，可能看大家之前都是EnableXXX（比如eureka）这里专门再写一个EnableHystrix方便大家记吧</em></p>
+<p>然后在我们的controller上面加入注解<code>@HystrixCommand</code>(fallbackMethod就是我们刚刚说的方法的名字)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/feignPower.do&quot;)</span></span><br><span class="line"><span class="meta">@HystrixCommand(fallbackMethod = &quot;fallbackMethod&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">feignPower</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> powerServiceClient.power();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>fallbackMethod：<br>这个R不重要，你看做一个Map就好了， 是我封装的一个返回值的类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">fallbackMethod</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">    System.out.println(name);</span><br><span class="line">    <span class="keyword">return</span> R.error(<span class="string">&quot;降级信息&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的这个降级信息具体内容得根据业务需求来， 比如说返回一个默认的查询信息，亦或是系统维护（因为有可能要暂时关闭某个微服务而吧资源让给其他服务）等等…<br>我们在power代码里面模拟一个异常</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/power.do&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">power</span><span class="params">(String name)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;power1&quot;</span>,<span class="string">&quot;value&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (name==<span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后启动服务调用一下看看结果：</p>
+<p><img data-src="https://i.loli.net/2020/10/27/XEhzu6RljOSPHWx.png" alt="olkjh.png"></p>
+<p>我们来测试一下超时:<br>我们改动一下power的代码 让他故意等待一回儿（模拟响应超时）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/power.do&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">power</span><span class="params">(String name)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;power1&quot;</span>,<span class="string">&quot;value&quot;</span>);</span><br><span class="line">    Thread.sleep(<span class="number">2000</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我就把返回值内容改一下方便大家看:</p>
+<p><img data-src="https://i.loli.net/2020/10/27/ixrmdI4JkSDTsXY.png" alt="mjut.png"></p>
+<p>可能有些同学有疑问， 我这里什么都没干， 就让他休眠了一下 ， 怎么就知道我这里超时了呢？</p>
+<p>因为hystrix他有默认的超时监听，当你这个请求默认超过了1秒钟就会超时 当然，这个可以配置的，至于怎么配置，待会儿我会把一些配置统一列出来</p>
+<p>讲了这么多， 这个降级到底有什么用呢？ </p>
+<p>第一， 他可以监听你的请求有没有超时，第二，报错了他这里直接截断了没有让请求一直卡在这里</p>
+<p>其实降级还有一个好处， 就是当你的系统马上迎来大量的并发(双十一秒杀这种 或者促销活动)  这时候如果发现系统马上承载不了这么大的并发时， 可以考虑先关闭一些不重要的微服务(在降级方法里面返回一个比较友好的信息)，吧资源让给主微服务,总结一下就是</p>
+<p>整体资源快不够了，忍痛将某些服务先关掉，待渡过难关，再开启回来。</p>
+<h1 id="熔断-限流"><a href="#熔断-限流" class="headerlink" title="熔断,限流"></a>熔断,限流</h1><p>讲完降级，我们来讲讲熔断，其实熔断，就好像我们生活中的跳闸一样， 比如说你的电路出故障了，为了防止出现大型事故 这里直接切断了你的电源以免意外继续发生, 把这个概念放在我们程序上也是如此， 当一个微服务调用多次出现问题时（默认是10秒内20次当然 这个也能配置），hystrix就会采取熔断机制，不再继续调用你的方法（会在默认5秒钟内和电器短路一样，5秒钟后会试探性的先关闭熔断机制，但是如果这时候再失败一次{之前是20次} 那么又会重新进行熔断） 而是直接调用降级方法，这样就一定程度上避免了服务雪崩的问题<br>这个东西光笔记不太好测试，只能你们自己去测试了</p>
+<p>限流<br>限流， 顾名思义， 就是限制你某个微服务的使用量（可用线程）<br>hystrix通过线程池的方式来管理你的微服务调用，他默认是一个线程池（10大小） 管理你的所有微服务，你可以给某个微服务开辟新的线程池：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/feignOrder.do&quot;)</span></span><br><span class="line"><span class="meta">@HystrixCommand(fallbackMethod = &quot;fallbackOrderMethod&quot;  ,</span></span><br><span class="line"><span class="meta">        threadPoolKey = &quot;order&quot;,</span></span><br><span class="line"><span class="meta">        threadPoolProperties =&#123;@HystrixProperty(name = &quot;coreSize&quot;,value = &quot;2&quot;)</span></span><br><span class="line"><span class="meta">                              ,@HystrixProperty(name = &quot;maxQueueSize&quot;,value = &quot;1&quot;&#125;)</span></span><br><span class="line"><span class="meta">public Object feignOrder(String name)&#123;</span></span><br><span class="line"><span class="meta">    System.out.println(1);</span></span><br><span class="line"><span class="meta">    return restTemplate.getForObject(ORDERURL+&quot;/order.do&quot;,Object.class);</span></span><br><span class="line"><span class="meta">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>threadPoolKey 就是在线程池唯一标识， hystrix 会拿你这个标识去计数，看线程占用是否超过了，超过了就会直接降级该次调用。比如，这里coreSize给他值为2，那么假设你这个方法调用时间是3s执行完，那么在3s内如果有超过2个请求进来的话，剩下的请求则全部降级</p>
+<h1 id="feign整合hystrix"><a href="#feign整合hystrix" class="headerlink" title="feign整合hystrix"></a>feign整合hystrix</h1><p>feign 默认是支持hystrix的， 但是SpringCloud 在 Dalston 版本之后就默认关闭了，因为业务需求不一定要用的到，<br>所以如果要使用首先得打开他，在yml文件加上如下配置:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">hystrix:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>加上配置之后降级方法怎么写呢？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FeignClient(value = &quot;SERVER-POWER&quot;,fallback = PowerServiceFallBack.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PowerServiceClient</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/power.do&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">power</span><span class="params">(<span class="meta">@RequestParam(&quot;name&quot;)</span> String name)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在feign客户端的注解上 有个属性叫fallback 然后指向一个类<br>PowerServiceFallBack 类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PowerServiceFallBack</span> <span class="keyword">implements</span> <span class="title">PowerServiceClient</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">power</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> R.error(<span class="string">&quot;测试降级&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样子，方法降级就写好了<br>当然 可能你有这种需求， 需要拿到具体的错误信息， 那么可以这样写:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PowerServiceClientFallBackFactory</span> <span class="keyword">implements</span> <span class="title">FallbackFactory</span>&lt;<span class="title">PowerServiceClient</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> PowerServiceClient <span class="title">create</span><span class="params">(Throwable throwable)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> PowerServiceClient() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Object <span class="title">power</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">                String message = throwable.getMessage();</span><br><span class="line">                <span class="keyword">return</span> R.error(<span class="string">&quot;feign降级&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户端指定一个fallbackFactory就好了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FeignClient(value = &quot;SERVER-POWER&quot;,fallbackFactory = PowerServiceClientFallBackFactory.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PowerServiceClient</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping(&quot;/power.do&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">power</span><span class="params">(<span class="meta">@RequestParam(&quot;name&quot;)</span> String name)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个message 就是拿到的错误信息<br>至此， 就完成了feign与hystrix的整合</p>
+<h1 id="hystrix相关配置"><a href="#hystrix相关配置" class="headerlink" title="hystrix相关配置"></a>hystrix相关配置</h1><p>Execution相关的属性的配置</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="selector-tag">hystrix</span><span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.execution</span><span class="selector-class">.isolation</span><span class="selector-class">.thread</span><span class="selector-class">.timeoutInMilliseconds</span> 命令执行超时时间，默认1000<span class="selector-tag">ms</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">hystrix</span><span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.execution</span><span class="selector-class">.timeout</span><span class="selector-class">.enabled</span> 执行是否启用超时，默认启用<span class="selector-tag">true</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">hystrix</span><span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.execution</span><span class="selector-class">.isolation</span><span class="selector-class">.thread</span><span class="selector-class">.interruptOnTimeout</span> 发生超时是是否中断， 默认<span class="selector-tag">true</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">hystrix</span><span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.execution</span><span class="selector-class">.isolation</span><span class="selector-class">.semaphore</span><span class="selector-class">.maxConcurrentRequests</span> 最大并发请求 数，默认10，该参数当使用<span class="selector-tag">ExecutionIsolationStrategy</span><span class="selector-class">.SEMAPHORE</span>策略时才有效。如果达到最大并发请求 数，请求会被拒绝。理论上选择<span class="selector-tag">semaphore</span> <span class="selector-tag">size</span>的原则和选择<span class="selector-tag">thread</span> <span class="selector-tag">size</span>一致，但选用<span class="selector-tag">semaphore</span>时每次执行 的单元要比较小且执行速度快（<span class="selector-tag">ms</span>级别），否则的话应该用<span class="selector-tag">thread</span>。 <span class="selector-tag">semaphore</span>应该占整个容器（<span class="selector-tag">tomcat</span>）的线程池的一小部分。 <span class="selector-tag">Fallback</span>相关的属性 这些参数可以应用于<span class="selector-tag">Hystrix</span>的<span class="selector-tag">THREAD</span>和<span class="selector-tag">SEMAPHORE</span>策略</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">hystrix</span><span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.fallback</span><span class="selector-class">.isolation</span><span class="selector-class">.semaphore</span><span class="selector-class">.maxConcurrentRequests</span> 如果并发数达到 该设置值，请求会被拒绝和抛出异常并且<span class="selector-tag">fallback</span>不会被调用。默认10</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">hystrix</span><span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.fallback</span><span class="selector-class">.enabled</span> 当执行失败或者请求被拒绝，是否会尝试调用</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">hystrixCommand</span><span class="selector-class">.getFallback</span>() 。默认<span class="selector-tag">true</span></span><br></pre></td></tr></table></figure>
+<p>Circuit Breaker相关的属性 </p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">hystrix<span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.circuitBreaker</span><span class="selector-class">.enabled</span> 用来跟踪circuit的健康性，如果未达标则让request短路。默认true</span><br><span class="line"></span><br><span class="line">hystrix<span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.circuitBreaker</span><span class="selector-class">.requestVolumeThreshold</span> 一个rolling window内最小的请 求数。如果设为<span class="number">20</span>，那么当一个rolling window的时间内（比如说<span class="number">1</span>个rolling window是<span class="number">10</span>秒）收到<span class="number">19</span>个请求， 即使<span class="number">19</span>个请求都失败，也不会触发circuit break。默认<span class="number">20</span></span><br><span class="line"></span><br><span class="line">hystrix<span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.circuitBreaker</span><span class="selector-class">.sleepWindowInMilliseconds</span> 触发短路的时间值，当该值设 为<span class="number">5000</span>时，则当触发circuit break后的<span class="number">5000</span>毫秒内都会拒绝request，也就是<span class="number">5000</span>毫秒后才会关闭circuit。 默认<span class="number">5000</span></span><br><span class="line"></span><br><span class="line">hystrix<span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.circuitBreaker</span>.errorThresholdPercentage错误比率阀值，如果错误率&gt;=该 值，circuit会被打开，并短路所有请求触发fallback。默认<span class="number">50</span></span><br><span class="line"></span><br><span class="line">hystrix<span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.circuitBreaker</span><span class="selector-class">.forceOpen</span> 强制打开熔断器，如果打开这个开关，那么拒绝所 有request，默认false</span><br><span class="line"></span><br><span class="line">hystrix<span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.circuitBreaker</span><span class="selector-class">.forceClosed</span> 强制关闭熔断器 如果这个开关打开，circuit将 一直关闭且忽略circuitBreaker.errorThresholdPercentage</span><br></pre></td></tr></table></figure>
+<p>Metrics相关参数</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">hystrix.command.<span class="section">default</span>.metrics.rollingStats.timeInMilliseconds 设置统计的时间窗口值的，毫秒 值，circuit break 的打开会根据<span class="number">1</span>个rolling window的统计来计算。若rolling window被设为<span class="number">10000</span>毫秒， 则rolling window会被分成n个buckets，每个bucket包含success，failure，timeout，rejection的次数 的统计信息。默认<span class="number">10000</span></span><br><span class="line"></span><br><span class="line">hystrix.command.<span class="section">default</span>.metrics.rollingStats.numBuckets 设置一个rolling window被划分的数 量，若numBuckets＝<span class="number">10</span>，rolling window＝<span class="number">10000</span>，那么一个bucket的时间即<span class="number">1</span>秒。必须符合rolling window  % numberBuckets == <span class="number">0</span>。默认<span class="number">10</span></span><br><span class="line"></span><br><span class="line">hystrix.command.<span class="section">default</span>.metrics.rollingPercentile.enabled 执行时是否enable指标的计算和跟踪， 默认true</span><br><span class="line"></span><br><span class="line">hystrix.command.<span class="section">default</span>.metrics.rollingPercentile.timeInMilliseconds 设置rolling  percentile window的时间，默认<span class="number">60000</span></span><br><span class="line"></span><br><span class="line">hystrix.command.<span class="section">default</span>.metrics.rollingPercentile.numBuckets 设置rolling percentile  window的numberBuckets。逻辑同上。默认<span class="number">6</span></span><br><span class="line"></span><br><span class="line">hystrix.command.<span class="section">default</span>.metrics.rollingPercentile.bucketSize 如果bucket size＝<span class="number">100</span>，window ＝<span class="number">10</span>s，若这<span class="number">10</span>s里有<span class="number">500</span>次执行，只有最后<span class="number">100</span>次执行会被统计到bucket里去。增加该值会增加内存开销以及排序 的开销。默认<span class="number">100</span></span><br><span class="line"></span><br><span class="line">hystrix.command.<span class="section">default</span>.metrics.healthSnapshot.intervalInMilliseconds 记录health 快照（用 来统计成功和错误绿）的间隔，默认<span class="number">500</span>ms</span><br></pre></td></tr></table></figure>
+<p>Request Context 相关参数</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">hystrix</span><span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.requestCache</span><span class="selector-class">.enabled</span> 默认<span class="selector-tag">true</span>，需要重载<span class="selector-tag">getCacheKey</span>()，返回<span class="selector-tag">null</span>时不 缓存</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">hystrix</span><span class="selector-class">.command</span><span class="selector-class">.default</span><span class="selector-class">.requestLog</span><span class="selector-class">.enabled</span> 记录日志到<span class="selector-tag">HystrixRequestLog</span>，默认<span class="selector-tag">true</span></span><br></pre></td></tr></table></figure>
+<p> Collapser Properties 相关参数<br> <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">hystrix</span><span class="selector-class">.collapser</span><span class="selector-class">.default</span><span class="selector-class">.maxRequestsInBatch</span> 单次批处理的最大请求数，达到该数量触发批处理，默认 <span class="selector-tag">Integer</span><span class="selector-class">.MAX_VALU</span></span><br><span class="line"></span><br><span class="line"><span class="selector-tag">hystrix</span><span class="selector-class">.collapser</span><span class="selector-class">.default</span><span class="selector-class">.timerDelayInMilliseconds</span> 触发批处理的延迟，也可以为创建批处理的时间 ＋该值，默认10</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">hystrix</span><span class="selector-class">.collapser</span><span class="selector-class">.default</span><span class="selector-class">.requestCache</span><span class="selector-class">.enabled</span> 是否对<span class="selector-tag">HystrixCollapser</span><span class="selector-class">.execute</span>() <span class="selector-tag">and</span>  <span class="selector-tag">HystrixCollapser</span><span class="selector-class">.queue</span>()的<span class="selector-tag">cache</span>，默认<span class="selector-tag">true</span></span><br></pre></td></tr></table></figure><br>ThreadPool 相关参数</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> </span><br><span class="line">hystrix<span class="selector-class">.threadpool</span><span class="selector-class">.default</span><span class="selector-class">.coreSize</span> 并发执行的最大线程数，默认<span class="number">10</span>，线程数默认值<span class="number">10</span>适用于大部分情况（有时可以设置得更小），如果需要设置得更大，那有个基本得公式可以 follow： requests per second at peak when healthy × <span class="number">99</span>th percentile latency <span class="keyword">in</span> seconds + some  breathing room 每秒最大支撑的请求数 (<span class="number">99%</span>平均响应时间 + 缓存值) 比如：每秒能处理<span class="number">1000</span>个请求，<span class="number">99%</span>的请求响应时间是<span class="number">60ms</span>，那么公式是： <span class="number">1000</span> （<span class="number">0.060</span>+<span class="number">0.012</span>），基本得原则时保持线程池尽可能小，他主要是为了释放压力，防止资源被阻塞。 当一切都是正常的时候，线程池一般仅会有<span class="number">1</span>到<span class="number">2</span>个线程激活来提供服务</span><br><span class="line"> </span><br><span class="line">hystrix<span class="selector-class">.threadpool</span><span class="selector-class">.default</span><span class="selector-class">.maxQueueSize</span> BlockingQueue的最大队列数，当设为<span class="number">1</span>，会使用SynchronousQueue，值为正时使用LinkedBlcokingQueue。该设置只会在初始化时有效，之后不能修改threadpool的queue size，除非reinitialising thread executor。默认<span class="number">1</span>。</span><br><span class="line"> </span><br><span class="line">hystrix<span class="selector-class">.threadpool</span><span class="selector-class">.default</span><span class="selector-class">.queueSizeRejectionThreshold</span> 即使maxQueueSize没有达到，达到 queueSizeRejectionThreshold该值后，请求也会被拒绝。因为maxQueueSize不能被动态修改，这个参数将允 许我们动态设置该值。<span class="keyword">if</span> maxQueueSize == -<span class="number">1</span>，该字段将不起作用 hystrix<span class="selector-class">.threadpool</span><span class="selector-class">.default</span><span class="selector-class">.keepAliveTimeMinutes</span> 如果corePoolSize和maxPoolSize设成一样（默认 实现）该设置无效。如果通过plugin（https:<span class="comment">//github.com/Netflix/Hystrix/wiki/Plugins）使用自定义 实现，该设置才有用，默认1.</span></span><br><span class="line"></span><br><span class="line">hystrix<span class="selector-class">.threadpool</span><span class="selector-class">.default</span><span class="selector-class">.metrics</span><span class="selector-class">.rollingStats</span><span class="selector-class">.timeInMilliseconds</span> 线程池统计指标的时间，默 认<span class="number">10000</span></span><br><span class="line"> </span><br><span class="line">hystrix<span class="selector-class">.threadpool</span><span class="selector-class">.default</span><span class="selector-class">.metrics</span><span class="selector-class">.rollingStats</span><span class="selector-class">.numBuckets</span> 将rolling window划分为n个 buckets，默认<span class="number">10</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SpringCloud/" rel="tag"># SpringCloud</a>
+              <a href="/tags/Hystrix/" rel="tag"># Hystrix</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/27/SpringCloud%E7%BB%84%E4%BB%B6%E4%B9%8Bribbon%E3%80%81fegin%EF%BC%88%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%EF%BC%89/" rel="prev" title="SpringCloud组件之ribbon、fegin（负载均衡）">
+      <i class="fa fa-chevron-left"></i> SpringCloud组件之ribbon、fegin（负载均衡）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/27/SpringCloud%E7%BB%84%E4%BB%B6%E4%B9%8Bzuul%EF%BC%88API%E7%BD%91%E5%85%B3%EF%BC%89/" rel="next" title="SpringCloud组件之zuul（API网关）">
+      SpringCloud组件之zuul（API网关） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#hystrix%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">hystrix是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E5%9E%8B%E9%A1%B9%E7%9B%AE%E4%B8%AD%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">大型项目中会出现的一些问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%8D%E7%BA%A7%EF%BC%8C%E8%B6%85%E6%97%B6"><span class="nav-number">3.</span> <span class="nav-text">降级，超时</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%86%94%E6%96%AD-%E9%99%90%E6%B5%81"><span class="nav-number">4.</span> <span class="nav-text">熔断,限流</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#feign%E6%95%B4%E5%90%88hystrix"><span class="nav-number">5.</span> <span class="nav-text">feign整合hystrix</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hystrix%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="nav-number">6.</span> <span class="nav-text">hystrix相关配置</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">十三岩</p>
+  <div class="site-description" itemprop="description">学海无涯，回头是岸</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shisyan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shisyan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shisyan@qq.com" title="E-Mail → mailto:shisyan@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">十三岩</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
