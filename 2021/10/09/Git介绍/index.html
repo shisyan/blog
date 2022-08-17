@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"shisyan.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Git 是目前世界上被最广泛使用的现代软件版本管理系统。Git 本身亦是一个成熟并处于活跃开发状态的开源项目，它最初是由 Linux 操作系统内核的创造者 Linus Torvalds 在 2005 年创造。今天惊人数量的软件项目依赖 Git 进行版本管理，这些项目包括开源以及各种商业软件。Git 在职业软件开发者中拥有良好的声誉，Git 目前支持绝大多数的操作系统以及 IDE（Integrate">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git介绍">
+<meta property="og:url" content="https://shisyan.com/2021/10/09/Git%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="十三幺&#96;s Blog">
+<meta property="og:description" content="Git 是目前世界上被最广泛使用的现代软件版本管理系统。Git 本身亦是一个成熟并处于活跃开发状态的开源项目，它最初是由 Linux 操作系统内核的创造者 Linus Torvalds 在 2005 年创造。今天惊人数量的软件项目依赖 Git 进行版本管理，这些项目包括开源以及各种商业软件。Git 在职业软件开发者中拥有良好的声誉，Git 目前支持绝大多数的操作系统以及 IDE（Integrate">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-09T06:26:14.000Z">
+<meta property="article:modified_time" content="2021-10-09T06:53:15.715Z">
+<meta property="article:author" content="十三幺">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://shisyan.com/2021/10/09/Git%E4%BB%8B%E7%BB%8D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Git介绍 | 十三幺`s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">十三幺`s Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://shisyan.com/2021/10/09/Git%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="十三幺">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="十三幺`s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-09 14:26:14 / 修改时间：14:53:15" itemprop="dateCreated datePublished" datetime="2021-10-09T14:26:14+08:00">2021-10-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Git 是目前世界上被最广泛使用的现代软件版本管理系统。Git 本身亦是一个成熟并处于活跃开发状态的开源项目，它最初是由 Linux 操作系统内核的创造者 Linus Torvalds 在 2005 年创造。今天惊人数量的软件项目依赖 Git 进行版本管理，这些项目包括开源以及各种商业软件。Git 在职业软件开发者中拥有良好的声誉，Git 目前支持绝大多数的操作系统以及 IDE（Integrated Development Environments）。</p>
+<a id="more"></a>
+<p>Git 使用分散式架构，是分散式版本管理 DVCS（Distributed Version Control System）的代表。相较于例如 CVS 或者 Subversion 等集中式版本管理软件，Git 并不是将代码的所有修改历史保存在中心服务器中。在 Git 中取而代之的是，所有参与项目的开发者都拥有各自的代码完全拷贝，并在自己的拷贝上进行软件开发。</p>
+<p>除了分散式的特点之外，Git 的设计也针对性能，安全性和柔软性作了特别优化。</p>
+<h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>Git 的底层性能相较于其他版本管理软件有强大的优势。在 Git 中所有的操作包括提交修改，创建分支，融合分支，以及求取差分都经过了性能优化。这些优化来自于 Git 的开发者对实际一般代码开发模式的深度认识和广泛知识。</p>
+<p>不同于某些版本管理软件，Git 在决定代码修改历史以及保存形式的时候不会被文件名的变化所愚弄，Git 关注的是文件的内容本身。在实际操作中，代码文件经历频繁的再命名，分解和合并。Git 使用一种混合了差分编码（delta encoding，仅保存代码修改的差分），压缩，直接保存，以及版本元数据（version metadata objects）的管理方式。</p>
+<p>分散式的架构也给 Git 带来了极大的性能优势。</p>
+<p>比如说，现有一名开发成员 Alice 对代码进行了一些改动，添加了一些在2.0版本中准备公开的功能，然后将这些修改以及一份简单的说明进行了提交。随后她又增加了一些另外的新功能，并又作了一次新提交。显然这两次修改在版本历史中被分开各自进行了保存。在这之后 Alice 把代码切换到了 1.3 版本，修复了一些旧版本中的 Bug（这和她新添加的功能没有关系）。这次修复的目的是为了让团队可以在公开 2.0 版本之前，释放一个 1.3.1 版本来解决 1.3 版本中的 Bug 问题。Alice 马上又可以回到她之前进行的 2.0 版本功能开发之中（通过切换代码分支），这些操作由于 Git 的分散属性，都不需要通过网络来连接到中央服务器进行，她甚至可以在飞机中完成这一切。当她完成所有工作，只需要向远程的代码库推送（Push）自己的修改即可。</p>
+<h1 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h1><p>Git 将保持所管理代码的整合性作为首要要务。所有的文件内容，文件相互关系，以及文件目录结构，版本，标签以及修改，都经过加密哈希校验算法（SHA1）的保护。这可以防止各种意外的代码修改失误，或者是第三者的恶意修改，使得代码修改历史完全可追迹。</p>
+<p>使用 Git 你可以确信你拥有代码的完整修改历史。</p>
+<p>某些其他的版本管理软件对发布后的代码不进行任何保护。这对于完全依赖于软件开发的团队来说可以是一种非常严重的安全脆弱性问题。</p>
+<h1 id="柔软性"><a href="#柔软性" class="headerlink" title="柔软性"></a>柔软性</h1><p>Git 的关键设计目标之一就是保持柔软性。Git 在以下方面都展现出了其柔软性：支持各种非线性的开发工作流程，对或大或小的软件项目都可以良好支持，以及兼容各种操作系统和协议。</p>
+<p>Git 支持将分支和标签作为一级基本对象（不同于 SVN），所以所有对分支和标签的操作也都会被保存到修改历史中。并不是所有的版本管理软件支持这一层面的追迹。</p>
+<h1 id="使用-Git-进行版本管理"><a href="#使用-Git-进行版本管理" class="headerlink" title="使用 Git 进行版本管理"></a>使用 Git 进行版本管理</h1><p>Git 对今天绝大多数软件开发团队来说都是最佳的选择。虽然每个团队都有各自的特点和目标，但是这里我们依然可以列举一些对他们来说Git优于其他选择的理由：</p>
+<h2 id="Git-很棒"><a href="#Git-很棒" class="headerlink" title="Git 很棒"></a>Git 很棒</h2><p>Git 兼备了功能性，高性能，安全性和柔软性，这些是很多软件开发团队以及个人所需要的要素。我们已经在上面详细讨论了这些特性。对很多软件开发团队来说，以以上标准货比三家的最终结果都是选择Git。</p>
+<h2 id="Git-已经成为了默认的行业标准"><a href="#Git-已经成为了默认的行业标准" class="headerlink" title="Git 已经成为了默认的行业标准"></a>Git 已经成为了默认的行业标准</h2><p>Git 是受到最广泛使用和支持的版本管理软件。这使得 Git 在以下这些方面具有极大的吸引力。我们在 Atlassian（此 Tutorial 作者所处的公司）的大多数代码都是用 Git 来进行管理的。</p>
+<p>绝大多数的软件开发者都有过 Git 的使用经历，很大一部分在校或者刚刚毕业的学生甚至只用过 Git 进行版本管理。虽然在一些公司开发成员可能在从其他版本管理软件迁移到 Git 的过程中要经历比较陡峭的学习曲线，但是大多数开发者以及他们未来的潜在开发者（学生）都已经具备了使用 Git 的基本技能，这就意味着他们不再需要额外的培训。</p>
+<p>Git 的普及还带来很多其他的好处，Git 的市场占有率意味着很多第三方的服务和 IDE 都开始默认支持 Git。比如我们的 DVCS 客户端 Source Tree，项目开发管理软件 JIRA，以及代码托管服务 Bitbucket。</p>
+<p>如果你是一个开发新手并期待在未来构建自己的专业开发技能，Git 毫无疑问是你在版本管理上的第一选择。</p>
+<h2 id="Git-是一个高质量的开源项目"><a href="#Git-是一个高质量的开源项目" class="headerlink" title="Git 是一个高质量的开源项目"></a>Git 是一个高质量的开源项目</h2><p>Git 本身是一个拥有良好支持和管理的开源软件项目。Git 的开发者在过去的十年中展现了良好的公平性，成熟的开发手段以保障其用户将来的需求，以及定期的更新以保持其可用性和功能性。开源的特性使得项目代码本身受到无微不至的检查，现在有无数的企业都依赖于 Git 的超高软件开发质量。</p>
+<p>Git 同时享有极好的社区支持和庞大的用户群体。你可以找到各种内容深入浅出的学习资料，包括书籍，教程，以及专题网站。甚至还有广播以及视频教程存在。</p>
+<p>保持开源降低了编程爱好者的投入成本因为他们不需要花一分钱来使用 Git。在开源项目中，Git 无疑扮演了前一世代版本管理软件，比如 SVN 和 CVS，的成功接班人。</p>
+<h2 id="对于-Git-的批评意见"><a href="#对于-Git-的批评意见" class="headerlink" title="对于 Git 的批评意见"></a>对于 Git 的批评意见</h2><p>对于 Git 的一个常见批评是它非常难以掌握。Git 中的某些术语对刚上手的朋友或者是使用其他系统的朋友可能会比较陌生，比如说，revert 这个命令在 Git 中和在 SVN 或者 CVS 中具有不同的含义。不过尽管如此，Git 依然向用户提供了非常强大的功能。学习掌握这些功能也许会花一些时间，但是一旦你学会了这些技能，它们会帮助你大大提高团队的开发效率。</p>
+<p>对于曾经使用非分散式版本管理的团队来说，保存代码的中央服务器可能是他们所不想舍去的。不过，虽然 Git 的确是分散式的架构设计，但是你依然可以设立一个「官方」的代码库来强制保存所有的修改。使用 Git 时，由于所有的开发者都拥有完整的代码库拷贝，所以他们的工作不会被中央服务器的性能甚至有无左右。即便他们下线或者在外，他们依然可以随时查看代码库的修改历史。得益于 Git 的分散式特性，你可以保持自己原有的工作方式但得到 Git 带来的额外好处，有时候你甚至会发现自己不曾意识到有些事居然还可以这样干。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/03/SpringBoot2-X%E5%BF%AB%E9%80%9F%E6%9E%84%E5%BB%BA%E5%92%8C%E9%85%8D%E7%BD%AE/" rel="prev" title="SpringBoot2.X快速构建和配置">
+      <i class="fa fa-chevron-left"></i> SpringBoot2.X快速构建和配置
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/10/09/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0%E4%BB%A3%E7%A0%81%E4%BB%93%E5%BA%93/" rel="next" title="从零搭建本地代码仓库">
+      从零搭建本地代码仓库 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD"><span class="nav-number">1.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">安全性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%94%E8%BD%AF%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">柔软性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Git-%E8%BF%9B%E8%A1%8C%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">使用 Git 进行版本管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-%E5%BE%88%E6%A3%92"><span class="nav-number">4.1.</span> <span class="nav-text">Git 很棒</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-%E5%B7%B2%E7%BB%8F%E6%88%90%E4%B8%BA%E4%BA%86%E9%BB%98%E8%AE%A4%E7%9A%84%E8%A1%8C%E4%B8%9A%E6%A0%87%E5%87%86"><span class="nav-number">4.2.</span> <span class="nav-text">Git 已经成为了默认的行业标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-%E6%98%AF%E4%B8%80%E4%B8%AA%E9%AB%98%E8%B4%A8%E9%87%8F%E7%9A%84%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE"><span class="nav-number">4.3.</span> <span class="nav-text">Git 是一个高质量的开源项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E4%BA%8E-Git-%E7%9A%84%E6%89%B9%E8%AF%84%E6%84%8F%E8%A7%81"><span class="nav-number">4.4.</span> <span class="nav-text">对于 Git 的批评意见</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">十三幺</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/shisyan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;shisyan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shisyan@qq.com" title="E-Mail → mailto:shisyan@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">十三幺</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

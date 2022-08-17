@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Git介绍</title>
+    <url>/2021/10/09/Git%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<p>Git 是目前世界上被最广泛使用的现代软件版本管理系统。Git 本身亦是一个成熟并处于活跃开发状态的开源项目，它最初是由 Linux 操作系统内核的创造者 Linus Torvalds 在 2005 年创造。今天惊人数量的软件项目依赖 Git 进行版本管理，这些项目包括开源以及各种商业软件。Git 在职业软件开发者中拥有良好的声誉，Git 目前支持绝大多数的操作系统以及 IDE（Integrated Development Environments）。</p>
+<a id="more"></a>
+<p>Git 使用分散式架构，是分散式版本管理 DVCS（Distributed Version Control System）的代表。相较于例如 CVS 或者 Subversion 等集中式版本管理软件，Git 并不是将代码的所有修改历史保存在中心服务器中。在 Git 中取而代之的是，所有参与项目的开发者都拥有各自的代码完全拷贝，并在自己的拷贝上进行软件开发。</p>
+<p>除了分散式的特点之外，Git 的设计也针对性能，安全性和柔软性作了特别优化。</p>
+<h1 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h1><p>Git 的底层性能相较于其他版本管理软件有强大的优势。在 Git 中所有的操作包括提交修改，创建分支，融合分支，以及求取差分都经过了性能优化。这些优化来自于 Git 的开发者对实际一般代码开发模式的深度认识和广泛知识。</p>
+<p>不同于某些版本管理软件，Git 在决定代码修改历史以及保存形式的时候不会被文件名的变化所愚弄，Git 关注的是文件的内容本身。在实际操作中，代码文件经历频繁的再命名，分解和合并。Git 使用一种混合了差分编码（delta encoding，仅保存代码修改的差分），压缩，直接保存，以及版本元数据（version metadata objects）的管理方式。</p>
+<p>分散式的架构也给 Git 带来了极大的性能优势。</p>
+<p>比如说，现有一名开发成员 Alice 对代码进行了一些改动，添加了一些在2.0版本中准备公开的功能，然后将这些修改以及一份简单的说明进行了提交。随后她又增加了一些另外的新功能，并又作了一次新提交。显然这两次修改在版本历史中被分开各自进行了保存。在这之后 Alice 把代码切换到了 1.3 版本，修复了一些旧版本中的 Bug（这和她新添加的功能没有关系）。这次修复的目的是为了让团队可以在公开 2.0 版本之前，释放一个 1.3.1 版本来解决 1.3 版本中的 Bug 问题。Alice 马上又可以回到她之前进行的 2.0 版本功能开发之中（通过切换代码分支），这些操作由于 Git 的分散属性，都不需要通过网络来连接到中央服务器进行，她甚至可以在飞机中完成这一切。当她完成所有工作，只需要向远程的代码库推送（Push）自己的修改即可。</p>
+<h1 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h1><p>Git 将保持所管理代码的整合性作为首要要务。所有的文件内容，文件相互关系，以及文件目录结构，版本，标签以及修改，都经过加密哈希校验算法（SHA1）的保护。这可以防止各种意外的代码修改失误，或者是第三者的恶意修改，使得代码修改历史完全可追迹。</p>
+<p>使用 Git 你可以确信你拥有代码的完整修改历史。</p>
+<p>某些其他的版本管理软件对发布后的代码不进行任何保护。这对于完全依赖于软件开发的团队来说可以是一种非常严重的安全脆弱性问题。</p>
+<h1 id="柔软性"><a href="#柔软性" class="headerlink" title="柔软性"></a>柔软性</h1><p>Git 的关键设计目标之一就是保持柔软性。Git 在以下方面都展现出了其柔软性：支持各种非线性的开发工作流程，对或大或小的软件项目都可以良好支持，以及兼容各种操作系统和协议。</p>
+<p>Git 支持将分支和标签作为一级基本对象（不同于 SVN），所以所有对分支和标签的操作也都会被保存到修改历史中。并不是所有的版本管理软件支持这一层面的追迹。</p>
+<h1 id="使用-Git-进行版本管理"><a href="#使用-Git-进行版本管理" class="headerlink" title="使用 Git 进行版本管理"></a>使用 Git 进行版本管理</h1><p>Git 对今天绝大多数软件开发团队来说都是最佳的选择。虽然每个团队都有各自的特点和目标，但是这里我们依然可以列举一些对他们来说Git优于其他选择的理由：</p>
+<h2 id="Git-很棒"><a href="#Git-很棒" class="headerlink" title="Git 很棒"></a>Git 很棒</h2><p>Git 兼备了功能性，高性能，安全性和柔软性，这些是很多软件开发团队以及个人所需要的要素。我们已经在上面详细讨论了这些特性。对很多软件开发团队来说，以以上标准货比三家的最终结果都是选择Git。</p>
+<h2 id="Git-已经成为了默认的行业标准"><a href="#Git-已经成为了默认的行业标准" class="headerlink" title="Git 已经成为了默认的行业标准"></a>Git 已经成为了默认的行业标准</h2><p>Git 是受到最广泛使用和支持的版本管理软件。这使得 Git 在以下这些方面具有极大的吸引力。我们在 Atlassian（此 Tutorial 作者所处的公司）的大多数代码都是用 Git 来进行管理的。</p>
+<p>绝大多数的软件开发者都有过 Git 的使用经历，很大一部分在校或者刚刚毕业的学生甚至只用过 Git 进行版本管理。虽然在一些公司开发成员可能在从其他版本管理软件迁移到 Git 的过程中要经历比较陡峭的学习曲线，但是大多数开发者以及他们未来的潜在开发者（学生）都已经具备了使用 Git 的基本技能，这就意味着他们不再需要额外的培训。</p>
+<p>Git 的普及还带来很多其他的好处，Git 的市场占有率意味着很多第三方的服务和 IDE 都开始默认支持 Git。比如我们的 DVCS 客户端 Source Tree，项目开发管理软件 JIRA，以及代码托管服务 Bitbucket。</p>
+<p>如果你是一个开发新手并期待在未来构建自己的专业开发技能，Git 毫无疑问是你在版本管理上的第一选择。</p>
+<h2 id="Git-是一个高质量的开源项目"><a href="#Git-是一个高质量的开源项目" class="headerlink" title="Git 是一个高质量的开源项目"></a>Git 是一个高质量的开源项目</h2><p>Git 本身是一个拥有良好支持和管理的开源软件项目。Git 的开发者在过去的十年中展现了良好的公平性，成熟的开发手段以保障其用户将来的需求，以及定期的更新以保持其可用性和功能性。开源的特性使得项目代码本身受到无微不至的检查，现在有无数的企业都依赖于 Git 的超高软件开发质量。</p>
+<p>Git 同时享有极好的社区支持和庞大的用户群体。你可以找到各种内容深入浅出的学习资料，包括书籍，教程，以及专题网站。甚至还有广播以及视频教程存在。</p>
+<p>保持开源降低了编程爱好者的投入成本因为他们不需要花一分钱来使用 Git。在开源项目中，Git 无疑扮演了前一世代版本管理软件，比如 SVN 和 CVS，的成功接班人。</p>
+<h2 id="对于-Git-的批评意见"><a href="#对于-Git-的批评意见" class="headerlink" title="对于 Git 的批评意见"></a>对于 Git 的批评意见</h2><p>对于 Git 的一个常见批评是它非常难以掌握。Git 中的某些术语对刚上手的朋友或者是使用其他系统的朋友可能会比较陌生，比如说，revert 这个命令在 Git 中和在 SVN 或者 CVS 中具有不同的含义。不过尽管如此，Git 依然向用户提供了非常强大的功能。学习掌握这些功能也许会花一些时间，但是一旦你学会了这些技能，它们会帮助你大大提高团队的开发效率。</p>
+<p>对于曾经使用非分散式版本管理的团队来说，保存代码的中央服务器可能是他们所不想舍去的。不过，虽然 Git 的确是分散式的架构设计，但是你依然可以设立一个「官方」的代码库来强制保存所有的修改。使用 Git 时，由于所有的开发者都拥有完整的代码库拷贝，所以他们的工作不会被中央服务器的性能甚至有无左右。即便他们下线或者在外，他们依然可以随时查看代码库的修改历史。得益于 Git 的分散式特性，你可以保持自己原有的工作方式但得到 Git 带来的额外好处，有时候你甚至会发现自己不曾意识到有些事居然还可以这样干。</p>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Java8新特性</title>
     <url>/2020/10/27/Java8%E6%96%B0%E7%89%B9%E6%80%A7/</url>
     <content><![CDATA[<p>毫无疑问，Java 8是自Java  5（2004年）发布以来Java语言最大的一次版本升级，Java 8带来了很多的新特性，比如编译器、类库、开发工具和JVM（Java虚拟机）。在这篇教程中我们将会学习这些新特性，并通过真实例子演示说明它们适用的场景。</p>
@@ -135,80 +167,6 @@
       </categories>
       <tags>
         <tag>Java8</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SpringCloud组件之eureka（注册中心）</title>
-    <url>/2020/10/27/SpringCloud%E7%BB%84%E4%BB%B6%E4%B9%8Beureka%EF%BC%88%E6%90%AD%E5%BB%BA%E3%80%81%E9%9B%86%E7%BE%A4%E3%80%81%E5%BF%83%E8%B7%B3%EF%BC%89/</url>
-    <content><![CDATA[<h1 id="eureka"><a href="#eureka" class="headerlink" title="eureka"></a>eureka</h1><h2 id="eureka是什么？"><a href="#eureka是什么？" class="headerlink" title="eureka是什么？"></a>eureka是什么？</h2><p>eureka是Netflix的子模块之一，也是一个核心的模块，eureka里有2个组件，一个是EurekaServer(一个独立的项目) 这个是用于定位服务以实现中间层服务器的负载平衡和故障转移，另一个便是EurekaClient（我们的微服务）它是用于与Server交互的，可以使得交互变得非常简单：只需要通过服务标识符即可拿到服务。</p>
-<h2 id="与spring-cloud的关系"><a href="#与spring-cloud的关系" class="headerlink" title="与spring-cloud的关系"></a>与spring-cloud的关系</h2><p>Spring Cloud 封装了 Netflix 公司开发的 Eureka 模块来实现服务注册和发现(可以对比Zookeeper)。<br>Eureka 采用了 C-S 的设计架构。Eureka Server 作为服务注册功能的服务器，它是服务注册中心。<br>而系统中的其他微服务，使用 Eureka 的客户端连接到 Eureka Server并维持心跳连接。这样系统的维护人员就可以通过 Eureka Server 来监控系统中各个微服务是否正常运行。SpringCloud 的一些其他模块（比如Zuul）就可以通过 Eureka Server 来发现系统中的其他微服务，并执行相关的逻辑。</p>
-<h2 id="eureka角色关系"><a href="#eureka角色关系" class="headerlink" title="eureka角色关系"></a>eureka角色关系</h2><p><img data-src="https://i.loli.net/2020/10/27/fTMlspmcJDznq9i.png" alt="eureka角色关系.png"></p>
-<h2 id="如何使用？"><a href="#如何使用？" class="headerlink" title="如何使用？"></a>如何使用？</h2><p>在spring-cloud项目里面加入依赖：<br>eureka客户端：</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>eureka服务端：</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-server<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p> eureka服务端项目里面加入以下配置：</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">3000</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">server:</span></span><br><span class="line">    <span class="attr">enable-self-preservation:</span> <span class="literal">false</span>  <span class="comment">#关闭自我保护机制</span></span><br><span class="line">    <span class="attr">eviction-interval-timer-in-ms:</span> <span class="number">4000</span> <span class="comment">#设置清理间隔（单位：毫秒 默认是60*1000）</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">localhost</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">registerWithEureka:</span> <span class="literal">false</span> <span class="comment">#不把自己作为一个客户端注册到自己身上</span></span><br><span class="line">    <span class="attr">fetchRegistry:</span> <span class="literal">false</span>  <span class="comment">#不需要从服务端获取注册信息（因为在这里自己就是服务端，而且已经禁用自己注册了）</span></span><br><span class="line">    <span class="attr">serviceUrl:</span></span><br><span class="line">      <span class="attr">defaultZone:</span> <span class="string">http://$&#123;eureka.instance.hostname&#125;:$&#123;server.port&#125;/eureka</span></span><br></pre></td></tr></table></figure>
-<p> 当然，不是全部必要的，这里只是把我这里的配置copy过来了<br> 然后在spring-boot启动项目上 加入注解<code>@EnableEurekaServer</code>就可以启动项目了</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@EnableEurekaServer</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppEureka</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(AppEureka.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果看见这个图片，那么说明你就搭建好了:<br><img data-src="https://i.loli.net/2020/10/27/bax5Pjp9zkF8fJn.png" alt="eureka首页.png"></p>
-<p><em>注：图片中警告只是说你把他的自我保护机制关闭了</em></p>
-<p>eureka客户端配置:</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">6000</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">serviceUrl:</span></span><br><span class="line">        <span class="attr">defaultZone:</span> <span class="string">http://localhost:3000/eureka/</span>  <span class="comment">#eureka服务端提供的注册地址 参考服务端配置的这个路径</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">    <span class="attr">instance-id:</span> <span class="string">power-1</span> <span class="comment">#此实例注册到eureka服务端的唯一的实例ID </span></span><br><span class="line">    <span class="attr">prefer-ip-address:</span> <span class="literal">true</span> <span class="comment">#是否显示IP地址</span></span><br><span class="line">    <span class="attr">leaseRenewalIntervalInSeconds:</span> <span class="number">10</span> <span class="comment">#eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着，默认为30秒 (与下面配置的单位都是秒)</span></span><br><span class="line">    <span class="attr">leaseExpirationDurationInSeconds:</span> <span class="number">30</span> <span class="comment">#Eureka服务器在接收到实例的最后一次发出的心跳后，需要等待多久才可以将此实例删除，默认为90秒</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">server-power</span> <span class="comment">#此实例注册到eureka服务端的name </span></span><br></pre></td></tr></table></figure>
-<p>然后在客户端的spring-boot启动项目上加入注解<code>@EnableEurekaClient</code>就可以启动项目了，这里就不截图了我们直接来看效果图：<br><img data-src="https://i.loli.net/2020/10/27/bax5Pjp9zkF8fJn.png" alt="eureka首页.png"></p>
-<p>这里我们能看见 名字叫<em>server-power</em>的（图中将其大写了）,id为<em>power-1</em>的服务注册到我们的Eureka上面来了 至此，一个简单的eureka已经搭建好了。</p>
-<h1 id="eureka集群"><a href="#eureka集群" class="headerlink" title="eureka集群"></a>eureka集群</h1><h2 id="eureka集群原理"><a href="#eureka集群原理" class="headerlink" title="eureka集群原理"></a>eureka集群原理</h2><p>服务启动后向Eureka注册，Eureka Server会将注册信息向其他Eureka Server进行同步，当服务消费者要调用服务提供者，则向服务注册中心获取服务提供者地址，然后会将服务提供者地址缓存在本地，下次再调用时，则直接从本地缓存中取，完成一次调用。</p>
-<h2 id="eureka集群配置"><a href="#eureka集群配置" class="headerlink" title="eureka集群配置"></a>eureka集群配置</h2><p>刚刚我们了解到 Eureka Server会将注册信息向其他Eureka Server进行同步，那么我们得声明有哪些server呢？<br>这里假设我们有3个Eureka Server如图：<br><img data-src="https://i.loli.net/2020/10/27/euiSHPbv9tFpJCs.png" alt="eurekaserver.png"></p>
-<p>现在怎么声明集群环境的server呢？ 我们看一张图：<br><img data-src="https://i.loli.net/2020/10/27/mMVUvdhpsw3tkfW.png" alt="eureka角色关系.png"></p>
-<p>可能看着有点抽象，我们来看看具体配置</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">3000</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">server:</span></span><br><span class="line">    <span class="attr">enable-self-preservation:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">eviction-interval-timer-in-ms:</span> <span class="number">4000</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">eureka3000.com</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">registerWithEureka:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">fetchRegistry:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">serviceUrl:</span></span><br><span class="line">      <span class="attr">defaultZone:</span> <span class="string">http://eureka3001.com:3001/eureka,http://eureka3002.com:3002/eureka</span></span><br></pre></td></tr></table></figure>
-<p>这里 方便理解集群 我们做了一个域名的映射(条件不是特别支持我使用三台笔记本来测试。。。) 至于域名怎么映射的话 这里简单提一下吧 修改你的hosts文件（win10的目录在C:\Windows\System32\drivers\etc 其他系统的话自行百度一下把）附上我的hosts文件：</p>
-<figure class="highlight accesslog"><table><tr><td class="code"><pre><span class="line"><span class="number">127.0.0.1</span>  eureka3000.com</span><br><span class="line"><span class="number">127.0.0.1</span>  eureka3001.com</span><br><span class="line"><span class="number">127.0.0.1</span>  eureka3002.com</span><br></pre></td></tr></table></figure>
-<p>我们回到主题，我们发现，集群配置与单体不同的点在于，单体是把服务注册到自己身上，而集群是注册到其它服务身上<br>至于为什么不注册自己了呢？回到最上面我们说过，eureka的server会把自己的注册信息与其他的server同步，所以这里我们不需要注册到自己身上，因为另外两台服务器会配置本台服务器。(这里可能有点绕，可以参考一下刚刚那张集群环境的图，或者自己动手配置一下，另外两台eureka的配置与这个是差不多的，就不发出来了，只要注意是注册到其他的服务上面就好了)<br>当三台eureka配置好之后，全部启动一下就可以看见效果了:<br><img data-src="https://i.loli.net/2020/10/27/N2vOhdqYSFA3MH7.png" alt="eureka集群注册.png"></p>
-<p>当然，我们这里仅仅是把服务端配置好了， 那客户端怎么配置呢？ 话不多说，上代码：</p>
-<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">client:</span></span><br><span class="line">  <span class="attr">serviceUrl:</span></span><br><span class="line">    <span class="attr">defaultZone:</span> <span class="string">http://localhost:3000/eureka/,http://eureka3001.com:3001/eureka,http://eureka3002.com:3002/eureka</span></span><br></pre></td></tr></table></figure>
-
-<p>我们这里只截取了要改动的那一部分。就是原来是注册到那一个地址上面，现在是要写三个eureka注册地址，但是不是代表他会注册三次，因为我们eureka server的注册信息是同步的，这里只需要注册一次就可以了，但是为什么要写三个地址呢。因为这样就可以做到高可用的配置：打个比方有3台服务器。但是突然宕机了一台，但是其他2台还健在，依然可以注册我们的服务，换句话来讲，只要有一台服务还建在，那么就可以注册服务。<br>这里效果图就不发了，和之前单机的没什么两样，只是你服务随便注册到哪个eureka server上其他的eureka server上都有该服务的注册信息。</p>
-<h1 id="CAP定理的含义"><a href="#CAP定理的含义" class="headerlink" title="CAP定理的含义"></a>CAP定理的含义</h1><p>分布式系统（distributed system）正变得越来越重要，大型网站几乎都是分布式的。</p>
-<p>分布式系统的最大难点，就是各个节点的状态如何同步。CAP定理是这方面的基本定理，也是理解分布式系统的起点。</p>
-<h2 id="分布式系统的三个指标"><a href="#分布式系统的三个指标" class="headerlink" title="分布式系统的三个指标"></a>分布式系统的三个指标</h2><p><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071607.jpg"></p>
-<p>1998年，加州大学的计算机科学家<em>Eric Brewer</em>提出，分布式系统有三个指标。</p>
-<ul>
-<li>Consistency</li>
-<li>Availability</li>
-<li>Partition tolerance</li>
-</ul>
-<p>它们的第一个字母分别是 C、A、P。</p>
-<p><em>Eric Brewer</em>说，这三个指标不可能同时做到。这个结论就叫做 CAP 定理。</p>
-<h2 id="Partition-tolerance（分区容错）"><a href="#Partition-tolerance（分区容错）" class="headerlink" title="Partition tolerance（分区容错）"></a>Partition tolerance（分区容错）</h2><p>先看 Partition tolerance，中文叫做”分区容错”。</p>
-<p>大多数分布式系统都分布在多个子网络。每个子网络就叫做一个区（partition）。分区容错的意思是，区间通信可能失败。比如，一台服务器放在中国，另一台服务器放在美国，这就是两个区，它们之间可能无法通信。</p>
-<p><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071601.png"></p>
-<p>上图中，G1 和 G2 是两台跨区的服务器。G1 向 G2 发送一条消息，G2 可能无法收到。系统设计的时候，必须考虑到这种情况。</p>
-<p>一般来说，分区容错无法避免，因此可以认为CAP的P总是成立。CAP定理告诉我们，剩下的C和A无法同时做到。</p>
-<h2 id="Consistency（一致性）"><a href="#Consistency（一致性）" class="headerlink" title="Consistency（一致性）"></a>Consistency（一致性）</h2><p>Consistency 中文叫做”一致性”。意思是，写操作之后的读操作，必须返回该值。举例来说，某条记录是 v0，用户向 G1 发起一个写操作，将其改为 v1。<br><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071602.png"></p>
-<p>接下来，用户的读操作就会得到 v1。这就叫一致性。<br><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071603.png"><br>问题是，用户有可能向 G2 发起读操作，由于 G2 的值没有发生变化，因此返回的是 v0。G1 和 G2 读操作的结果不一致，这就不满足一致性了。<br><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071604.png"><br>为了让 G2 也能变为 v1，就要在 G1 写操作的时候，让 G1 向 G2 发送一条消息，要求 G2 也改成 v1。<br><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071605.png"><br>这样的话，用户向 G2 发起读操作，也能得到 v1。<br><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071606.png">  </p>
-<h2 id="Availability（可用性）"><a href="#Availability（可用性）" class="headerlink" title="Availability（可用性）"></a>Availability（可用性）</h2><p>Availability 中文叫做”可用性”，意思是只要收到用户的请求，服务器就必须给出回应。</p>
-<p>用户可以选择向 G1 或 G2 发起读操作。不管是哪台服务器，只要收到请求，就必须告诉用户，到底是 v0 还是 v1，否则就不满足可用性。</p>
-<h2 id="Consistency-和-Availability-的矛盾"><a href="#Consistency-和-Availability-的矛盾" class="headerlink" title="Consistency 和 Availability 的矛盾"></a>Consistency 和 Availability 的矛盾</h2><p>一致性和可用性，为什么不可能同时成立？答案很简单，因为可能通信失败（即出现分区容错）。</p>
-<p>如果保证 G2 的一致性，那么 G1 必须在写操作时，锁定 G2 的读操作和写操作。只有数据同步后，才能重新开放读写。锁定期间，G2 不能读写，没有可用性不。</p>
-<p>如果保证 G2 的可用性，那么势必不能锁定 G2，所以一致性不成立。</p>
-<p>综上所述，G2 无法同时做到一致性和可用性。系统设计时只能选择一个目标。如果追求一致性，那么无法保证所有节点的可用性；如果追求所有节点的可用性，那就没法做到一致性。</p>
-<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>在什么场合，可用性高于一致性？</p>
-<p>举例来说，发布一张网页到 CDN，多个服务器有这张网页的副本。后来发现一个错误，需要更新网页，这时只能每个服务器都更新一遍。</p>
-<p>一般来说，网页的更新不是特别强调一致性。短时期内，一些用户拿到老版本，另一些用户拿到新版本，问题不会特别大。当然，所有人最终都会看到新版本。所以，这个场合就是可用性高于一致性。</p>
-<h1 id="eureka对比Zookeeper"><a href="#eureka对比Zookeeper" class="headerlink" title="eureka对比Zookeeper"></a>eureka对比Zookeeper</h1><p>Zookeeper在设计的时候遵循的是CP原则，即一致性,Zookeeper会出现这样一种情况，当master节点因为网络故障与其他节点失去联系时剩余节点会重新进行leader选举，问题在于，选举leader的时间太长：30~120s，且选举期间整个Zookeeper集群是不可用的，这就导致在选举期间注册服务处于瘫痪状态，在云部署的环境下，因网络环境使Zookeeper集群失去master节点是较大概率发生的事情，虽然服务能够最终恢复，但是漫长的选举时间导致长期的服务注册不可用是不能容忍的。<br>Eureka在设计的时候遵循的是AP原则，即可用性。Eureka各个节点（服务)是平等的， 没有主从之分，几个节点down掉不会影响正常工作，剩余的节点（服务） 依然可以提供注册与查询服务，而Eureka的客户端在向某个Eureka注册或发现连接失败，则会自动切换到其他节点，也就是说，只要有一台Eureka还在，就能注册可用（保证可用性）， 只不过查询到的信息不是最新的（不保证强一致），除此之外，Eureka还有自我保护机制，如果在15分钟内超过85%节点都没有正常心跳，那么eureka就认为客户端与注册中心出现了网络故障，此时会出现一下情况：  </p>
-<ol>
-<li>Eureka不再从注册列表中移除因为长时间没有收到心跳而过期的服务</li>
-<li>Eureka仍然能够接收新服务的注册和查询请求，但是不会被同步到其它节点上（即保证当前节点可用）</li>
-<li>当网络稳定后，当前实例新的注册信息会被同步到其它节点中</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Spring微服务</category>
-      </categories>
-      <tags>
-        <tag>SpringCloud</tag>
-        <tag>Eureka</tag>
       </tags>
   </entry>
   <entry>
@@ -351,6 +309,106 @@
       </categories>
       <tags>
         <tag>SpringBoot</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringCloud组件之eureka（注册中心）</title>
+    <url>/2020/10/27/SpringCloud%E7%BB%84%E4%BB%B6%E4%B9%8Beureka%EF%BC%88%E6%90%AD%E5%BB%BA%E3%80%81%E9%9B%86%E7%BE%A4%E3%80%81%E5%BF%83%E8%B7%B3%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="eureka"><a href="#eureka" class="headerlink" title="eureka"></a>eureka</h1><h2 id="eureka是什么？"><a href="#eureka是什么？" class="headerlink" title="eureka是什么？"></a>eureka是什么？</h2><p>eureka是Netflix的子模块之一，也是一个核心的模块，eureka里有2个组件，一个是EurekaServer(一个独立的项目) 这个是用于定位服务以实现中间层服务器的负载平衡和故障转移，另一个便是EurekaClient（我们的微服务）它是用于与Server交互的，可以使得交互变得非常简单：只需要通过服务标识符即可拿到服务。</p>
+<h2 id="与spring-cloud的关系"><a href="#与spring-cloud的关系" class="headerlink" title="与spring-cloud的关系"></a>与spring-cloud的关系</h2><p>Spring Cloud 封装了 Netflix 公司开发的 Eureka 模块来实现服务注册和发现(可以对比Zookeeper)。<br>Eureka 采用了 C-S 的设计架构。Eureka Server 作为服务注册功能的服务器，它是服务注册中心。<br>而系统中的其他微服务，使用 Eureka 的客户端连接到 Eureka Server并维持心跳连接。这样系统的维护人员就可以通过 Eureka Server 来监控系统中各个微服务是否正常运行。SpringCloud 的一些其他模块（比如Zuul）就可以通过 Eureka Server 来发现系统中的其他微服务，并执行相关的逻辑。</p>
+<h2 id="eureka角色关系"><a href="#eureka角色关系" class="headerlink" title="eureka角色关系"></a>eureka角色关系</h2><p><img data-src="https://i.loli.net/2020/10/27/fTMlspmcJDznq9i.png" alt="eureka角色关系.png"></p>
+<h2 id="如何使用？"><a href="#如何使用？" class="headerlink" title="如何使用？"></a>如何使用？</h2><p>在spring-cloud项目里面加入依赖：<br>eureka客户端：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>eureka服务端：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-server<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p> eureka服务端项目里面加入以下配置：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">3000</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">server:</span></span><br><span class="line">    <span class="attr">enable-self-preservation:</span> <span class="literal">false</span>  <span class="comment">#关闭自我保护机制</span></span><br><span class="line">    <span class="attr">eviction-interval-timer-in-ms:</span> <span class="number">4000</span> <span class="comment">#设置清理间隔（单位：毫秒 默认是60*1000）</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">localhost</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">registerWithEureka:</span> <span class="literal">false</span> <span class="comment">#不把自己作为一个客户端注册到自己身上</span></span><br><span class="line">    <span class="attr">fetchRegistry:</span> <span class="literal">false</span>  <span class="comment">#不需要从服务端获取注册信息（因为在这里自己就是服务端，而且已经禁用自己注册了）</span></span><br><span class="line">    <span class="attr">serviceUrl:</span></span><br><span class="line">      <span class="attr">defaultZone:</span> <span class="string">http://$&#123;eureka.instance.hostname&#125;:$&#123;server.port&#125;/eureka</span></span><br></pre></td></tr></table></figure>
+<p> 当然，不是全部必要的，这里只是把我这里的配置copy过来了<br> 然后在spring-boot启动项目上 加入注解<code>@EnableEurekaServer</code>就可以启动项目了</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@EnableEurekaServer</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppEureka</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(AppEureka.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果看见这个图片，那么说明你就搭建好了:<br><img data-src="https://i.loli.net/2020/10/27/bax5Pjp9zkF8fJn.png" alt="eureka首页.png"></p>
+<p><em>注：图片中警告只是说你把他的自我保护机制关闭了</em></p>
+<p>eureka客户端配置:</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">6000</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">serviceUrl:</span></span><br><span class="line">        <span class="attr">defaultZone:</span> <span class="string">http://localhost:3000/eureka/</span>  <span class="comment">#eureka服务端提供的注册地址 参考服务端配置的这个路径</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">    <span class="attr">instance-id:</span> <span class="string">power-1</span> <span class="comment">#此实例注册到eureka服务端的唯一的实例ID </span></span><br><span class="line">    <span class="attr">prefer-ip-address:</span> <span class="literal">true</span> <span class="comment">#是否显示IP地址</span></span><br><span class="line">    <span class="attr">leaseRenewalIntervalInSeconds:</span> <span class="number">10</span> <span class="comment">#eureka客户需要多长时间发送心跳给eureka服务器，表明它仍然活着，默认为30秒 (与下面配置的单位都是秒)</span></span><br><span class="line">    <span class="attr">leaseExpirationDurationInSeconds:</span> <span class="number">30</span> <span class="comment">#Eureka服务器在接收到实例的最后一次发出的心跳后，需要等待多久才可以将此实例删除，默认为90秒</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">server-power</span> <span class="comment">#此实例注册到eureka服务端的name </span></span><br></pre></td></tr></table></figure>
+<p>然后在客户端的spring-boot启动项目上加入注解<code>@EnableEurekaClient</code>就可以启动项目了，这里就不截图了我们直接来看效果图：<br><img data-src="https://i.loli.net/2020/10/27/bax5Pjp9zkF8fJn.png" alt="eureka首页.png"></p>
+<p>这里我们能看见 名字叫<em>server-power</em>的（图中将其大写了）,id为<em>power-1</em>的服务注册到我们的Eureka上面来了 至此，一个简单的eureka已经搭建好了。</p>
+<h1 id="eureka集群"><a href="#eureka集群" class="headerlink" title="eureka集群"></a>eureka集群</h1><h2 id="eureka集群原理"><a href="#eureka集群原理" class="headerlink" title="eureka集群原理"></a>eureka集群原理</h2><p>服务启动后向Eureka注册，Eureka Server会将注册信息向其他Eureka Server进行同步，当服务消费者要调用服务提供者，则向服务注册中心获取服务提供者地址，然后会将服务提供者地址缓存在本地，下次再调用时，则直接从本地缓存中取，完成一次调用。</p>
+<h2 id="eureka集群配置"><a href="#eureka集群配置" class="headerlink" title="eureka集群配置"></a>eureka集群配置</h2><p>刚刚我们了解到 Eureka Server会将注册信息向其他Eureka Server进行同步，那么我们得声明有哪些server呢？<br>这里假设我们有3个Eureka Server如图：<br><img data-src="https://i.loli.net/2020/10/27/euiSHPbv9tFpJCs.png" alt="eurekaserver.png"></p>
+<p>现在怎么声明集群环境的server呢？ 我们看一张图：<br><img data-src="https://i.loli.net/2020/10/27/mMVUvdhpsw3tkfW.png" alt="eureka角色关系.png"></p>
+<p>可能看着有点抽象，我们来看看具体配置</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">3000</span></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">server:</span></span><br><span class="line">    <span class="attr">enable-self-preservation:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">eviction-interval-timer-in-ms:</span> <span class="number">4000</span></span><br><span class="line">  <span class="attr">instance:</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">eureka3000.com</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">registerWithEureka:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">fetchRegistry:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">serviceUrl:</span></span><br><span class="line">      <span class="attr">defaultZone:</span> <span class="string">http://eureka3001.com:3001/eureka,http://eureka3002.com:3002/eureka</span></span><br></pre></td></tr></table></figure>
+<p>这里 方便理解集群 我们做了一个域名的映射(条件不是特别支持我使用三台笔记本来测试。。。) 至于域名怎么映射的话 这里简单提一下吧 修改你的hosts文件（win10的目录在C:\Windows\System32\drivers\etc 其他系统的话自行百度一下把）附上我的hosts文件：</p>
+<figure class="highlight accesslog"><table><tr><td class="code"><pre><span class="line"><span class="number">127.0.0.1</span>  eureka3000.com</span><br><span class="line"><span class="number">127.0.0.1</span>  eureka3001.com</span><br><span class="line"><span class="number">127.0.0.1</span>  eureka3002.com</span><br></pre></td></tr></table></figure>
+<p>我们回到主题，我们发现，集群配置与单体不同的点在于，单体是把服务注册到自己身上，而集群是注册到其它服务身上<br>至于为什么不注册自己了呢？回到最上面我们说过，eureka的server会把自己的注册信息与其他的server同步，所以这里我们不需要注册到自己身上，因为另外两台服务器会配置本台服务器。(这里可能有点绕，可以参考一下刚刚那张集群环境的图，或者自己动手配置一下，另外两台eureka的配置与这个是差不多的，就不发出来了，只要注意是注册到其他的服务上面就好了)<br>当三台eureka配置好之后，全部启动一下就可以看见效果了:<br><img data-src="https://i.loli.net/2020/10/27/N2vOhdqYSFA3MH7.png" alt="eureka集群注册.png"></p>
+<p>当然，我们这里仅仅是把服务端配置好了， 那客户端怎么配置呢？ 话不多说，上代码：</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">client:</span></span><br><span class="line">  <span class="attr">serviceUrl:</span></span><br><span class="line">    <span class="attr">defaultZone:</span> <span class="string">http://localhost:3000/eureka/,http://eureka3001.com:3001/eureka,http://eureka3002.com:3002/eureka</span></span><br></pre></td></tr></table></figure>
+
+<p>我们这里只截取了要改动的那一部分。就是原来是注册到那一个地址上面，现在是要写三个eureka注册地址，但是不是代表他会注册三次，因为我们eureka server的注册信息是同步的，这里只需要注册一次就可以了，但是为什么要写三个地址呢。因为这样就可以做到高可用的配置：打个比方有3台服务器。但是突然宕机了一台，但是其他2台还健在，依然可以注册我们的服务，换句话来讲，只要有一台服务还建在，那么就可以注册服务。<br>这里效果图就不发了，和之前单机的没什么两样，只是你服务随便注册到哪个eureka server上其他的eureka server上都有该服务的注册信息。</p>
+<h1 id="CAP定理的含义"><a href="#CAP定理的含义" class="headerlink" title="CAP定理的含义"></a>CAP定理的含义</h1><p>分布式系统（distributed system）正变得越来越重要，大型网站几乎都是分布式的。</p>
+<p>分布式系统的最大难点，就是各个节点的状态如何同步。CAP定理是这方面的基本定理，也是理解分布式系统的起点。</p>
+<h2 id="分布式系统的三个指标"><a href="#分布式系统的三个指标" class="headerlink" title="分布式系统的三个指标"></a>分布式系统的三个指标</h2><p><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071607.jpg"></p>
+<p>1998年，加州大学的计算机科学家<em>Eric Brewer</em>提出，分布式系统有三个指标。</p>
+<ul>
+<li>Consistency</li>
+<li>Availability</li>
+<li>Partition tolerance</li>
+</ul>
+<p>它们的第一个字母分别是 C、A、P。</p>
+<p><em>Eric Brewer</em>说，这三个指标不可能同时做到。这个结论就叫做 CAP 定理。</p>
+<h2 id="Partition-tolerance（分区容错）"><a href="#Partition-tolerance（分区容错）" class="headerlink" title="Partition tolerance（分区容错）"></a>Partition tolerance（分区容错）</h2><p>先看 Partition tolerance，中文叫做”分区容错”。</p>
+<p>大多数分布式系统都分布在多个子网络。每个子网络就叫做一个区（partition）。分区容错的意思是，区间通信可能失败。比如，一台服务器放在中国，另一台服务器放在美国，这就是两个区，它们之间可能无法通信。</p>
+<p><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071601.png"></p>
+<p>上图中，G1 和 G2 是两台跨区的服务器。G1 向 G2 发送一条消息，G2 可能无法收到。系统设计的时候，必须考虑到这种情况。</p>
+<p>一般来说，分区容错无法避免，因此可以认为CAP的P总是成立。CAP定理告诉我们，剩下的C和A无法同时做到。</p>
+<h2 id="Consistency（一致性）"><a href="#Consistency（一致性）" class="headerlink" title="Consistency（一致性）"></a>Consistency（一致性）</h2><p>Consistency 中文叫做”一致性”。意思是，写操作之后的读操作，必须返回该值。举例来说，某条记录是 v0，用户向 G1 发起一个写操作，将其改为 v1。<br><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071602.png"></p>
+<p>接下来，用户的读操作就会得到 v1。这就叫一致性。<br><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071603.png"><br>问题是，用户有可能向 G2 发起读操作，由于 G2 的值没有发生变化，因此返回的是 v0。G1 和 G2 读操作的结果不一致，这就不满足一致性了。<br><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071604.png"><br>为了让 G2 也能变为 v1，就要在 G1 写操作的时候，让 G1 向 G2 发送一条消息，要求 G2 也改成 v1。<br><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071605.png"><br>这样的话，用户向 G2 发起读操作，也能得到 v1。<br><img data-src="https://www.wangbase.com/blogimg/asset/201807/bg2018071606.png">  </p>
+<h2 id="Availability（可用性）"><a href="#Availability（可用性）" class="headerlink" title="Availability（可用性）"></a>Availability（可用性）</h2><p>Availability 中文叫做”可用性”，意思是只要收到用户的请求，服务器就必须给出回应。</p>
+<p>用户可以选择向 G1 或 G2 发起读操作。不管是哪台服务器，只要收到请求，就必须告诉用户，到底是 v0 还是 v1，否则就不满足可用性。</p>
+<h2 id="Consistency-和-Availability-的矛盾"><a href="#Consistency-和-Availability-的矛盾" class="headerlink" title="Consistency 和 Availability 的矛盾"></a>Consistency 和 Availability 的矛盾</h2><p>一致性和可用性，为什么不可能同时成立？答案很简单，因为可能通信失败（即出现分区容错）。</p>
+<p>如果保证 G2 的一致性，那么 G1 必须在写操作时，锁定 G2 的读操作和写操作。只有数据同步后，才能重新开放读写。锁定期间，G2 不能读写，没有可用性不。</p>
+<p>如果保证 G2 的可用性，那么势必不能锁定 G2，所以一致性不成立。</p>
+<p>综上所述，G2 无法同时做到一致性和可用性。系统设计时只能选择一个目标。如果追求一致性，那么无法保证所有节点的可用性；如果追求所有节点的可用性，那就没法做到一致性。</p>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>在什么场合，可用性高于一致性？</p>
+<p>举例来说，发布一张网页到 CDN，多个服务器有这张网页的副本。后来发现一个错误，需要更新网页，这时只能每个服务器都更新一遍。</p>
+<p>一般来说，网页的更新不是特别强调一致性。短时期内，一些用户拿到老版本，另一些用户拿到新版本，问题不会特别大。当然，所有人最终都会看到新版本。所以，这个场合就是可用性高于一致性。</p>
+<h1 id="eureka对比Zookeeper"><a href="#eureka对比Zookeeper" class="headerlink" title="eureka对比Zookeeper"></a>eureka对比Zookeeper</h1><p>Zookeeper在设计的时候遵循的是CP原则，即一致性,Zookeeper会出现这样一种情况，当master节点因为网络故障与其他节点失去联系时剩余节点会重新进行leader选举，问题在于，选举leader的时间太长：30~120s，且选举期间整个Zookeeper集群是不可用的，这就导致在选举期间注册服务处于瘫痪状态，在云部署的环境下，因网络环境使Zookeeper集群失去master节点是较大概率发生的事情，虽然服务能够最终恢复，但是漫长的选举时间导致长期的服务注册不可用是不能容忍的。<br>Eureka在设计的时候遵循的是AP原则，即可用性。Eureka各个节点（服务)是平等的， 没有主从之分，几个节点down掉不会影响正常工作，剩余的节点（服务） 依然可以提供注册与查询服务，而Eureka的客户端在向某个Eureka注册或发现连接失败，则会自动切换到其他节点，也就是说，只要有一台Eureka还在，就能注册可用（保证可用性）， 只不过查询到的信息不是最新的（不保证强一致），除此之外，Eureka还有自我保护机制，如果在15分钟内超过85%节点都没有正常心跳，那么eureka就认为客户端与注册中心出现了网络故障，此时会出现一下情况：  </p>
+<ol>
+<li>Eureka不再从注册列表中移除因为长时间没有收到心跳而过期的服务</li>
+<li>Eureka仍然能够接收新服务的注册和查询请求，但是不会被同步到其它节点上（即保证当前节点可用）</li>
+<li>当网络稳定后，当前实例新的注册信息会被同步到其它节点中</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Spring微服务</category>
+      </categories>
+      <tags>
+        <tag>SpringCloud</tag>
+        <tag>Eureka</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>从零搭建本地代码仓库</title>
+    <url>/2021/10/09/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BA%E6%9C%AC%E5%9C%B0%E4%BB%A3%E7%A0%81%E4%BB%93%E5%BA%93/</url>
+    <content><![CDATA[<p>本篇完全面向入门者。我假设你从零开始创建一个项目并且想用 Git 来进行版本控制，我们会讨论如何在你的个人项目中使用 Git ，比如如何初始化你的项目，如何管理新的或者已有的文件，如何在远端仓库中储存你的代码。</p>
+<a id="more"></a>
+
+<h1 id="快速指南"><a href="#快速指南" class="headerlink" title="快速指南"></a>快速指南</h1><p>这节是完全面向入门者的，我假设你从零开始创建一个项目并且想用 Git 来进行版本控制，因此本文会避开分支这些相对复杂的概念。</p>
+<p>在这节中，我会介绍如何在你的个人项目中使用 Git，我们会讨论 Git最基本的操作——如何初始化你的项目，如何管理新的或者已有的文件，如何在远端仓库中储存你的代码。</p>
+<h2 id="安装-Git"><a href="#安装-Git" class="headerlink" title="安装 Git"></a>安装 Git</h2><ul>
+<li>Mac 用户：Xcode Command Line Tools 自带 Git (xcode-select –install)</li>
+<li>Linux 用户：sudo apt-get install git</li>
+<li>Windows 用户：下载 <a href="https://git-scm.com/">Git</a>，对于 Windows 用户，安装后如果希望在全局的 cmd 中使用 git，需要把 git.exe 加入 PATH 环境变量中，或在 Git Bash 中使用 Git。</li>
+</ul>
+<h2 id="检出仓库"><a href="#检出仓库" class="headerlink" title="检出仓库"></a>检出仓库</h2><h2 id="创建新仓库"><a href="#创建新仓库" class="headerlink" title="创建新仓库"></a>创建新仓库</h2><h2 id="工作流"><a href="#工作流" class="headerlink" title="工作流"></a>工作流</h2><p>你的本地仓库由 git 维护的三棵“树”组成。第一个是你的 工作目录，它持有实际文件；第二个是 缓存区（Index），它像个缓存区域，临时保存你的改动；最后是 HEAD，指向你最近一次提交后的结果。<br><img data-src="https://camo.githubusercontent.com/6e52beb12c47b2972937c8ae214e21eaa3647777c28936925ebf78ca0038157c/687474703a2f2f7777772e626f6f746373732e636f6d2f702f6769742d67756964652f696d672f74726565732e706e67" alt="图"></p>
+<h2 id="添加与提交"><a href="#添加与提交" class="headerlink" title="添加与提交"></a>添加与提交</h2><p>执行如下命令以创建一个本地仓库的克隆版本： <code>git clone /path/to/repository</code></p>
+<p>如果是远端服务器上的仓库，你的命令会是这个样子： <code>git clone username@host:/path/to/repository</code> （通过 SSH） 或者： <code>git clone https:/path/to/repository.git</code> （通过 https）</p>
+<p>比如说 <code>git clone https://github.com/geeeeeeeeek/git-recipes.git</code> 可以将 git 教程 clone 到你指定的目录。</p>
+<h2 id="推送改动"><a href="#推送改动" class="headerlink" title="推送改动"></a>推送改动</h2><h1 id="创建代码仓库"><a href="#创建代码仓库" class="headerlink" title="创建代码仓库"></a>创建代码仓库</h1><h1 id="保存你的更改"><a href="#保存你的更改" class="headerlink" title="保存你的更改"></a>保存你的更改</h1><h1 id="检查仓库状态"><a href="#检查仓库状态" class="headerlink" title="检查仓库状态"></a>检查仓库状态</h1><h1 id="检出之前的提交"><a href="#检出之前的提交" class="headerlink" title="检出之前的提交"></a>检出之前的提交</h1><h1 id="回滚错误的修改"><a href="#回滚错误的修改" class="headerlink" title="回滚错误的修改"></a>回滚错误的修改</h1><h1 id="重写项目历史"><a href="#重写项目历史" class="headerlink" title="重写项目历史"></a>重写项目历史</h1>]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+        <tag>从零搭建本地代码仓库</tag>
       </tags>
   </entry>
 </search>
