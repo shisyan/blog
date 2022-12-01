@@ -36,6 +36,8 @@
     <title>Java8新特性</title>
     <url>/2020/10/27/Java8%E6%96%B0%E7%89%B9%E6%80%A7/</url>
     <content><![CDATA[<p>毫无疑问，Java 8是自Java  5（2004年）发布以来Java语言最大的一次版本升级，Java 8带来了很多的新特性，比如编译器、类库、开发工具和JVM（Java虚拟机）。在这篇教程中我们将会学习这些新特性，并通过真实例子演示说明它们适用的场景。</p>
+<a id="more"></a>
+
 <h1 id="Lambda表达式"><a href="#Lambda表达式" class="headerlink" title="Lambda表达式"></a>Lambda表达式</h1><p>在JDK8之前，一个方法能接受的参数都是变量，例如： object.method(Object o)<br>那么，如果需要传入一个动作呢？比如回调。<br>那么你可能会想到匿名内部类。<br>例如：<br>匿名内部类是需要依赖接口的，所以需要先定义个接口</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PersonCallback</span> </span>&#123;</span><br><span class="line"> <span class="function"><span class="keyword">void</span> <span class="title">callback</span><span class="params">(Person person)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Person类：</p>
@@ -50,7 +52,7 @@
 </ol>
 <p>我们知道，当我们实现一个接口的时候，肯定要实现接口里面的方法，那么现在一个Lambda表达式应该也要遵<br>循这一个基本准则，那么一个Lambda表达式它实现了接口里的什么方法呢？<br>答案是：一个Lambda表达式实现了接口里的有且仅有的唯一一个抽象方法。那么对于这种接口就叫做<strong>函数式接口</strong>。<br>Lambda表达式其实完成了<strong>实现接口并且实现接口里的方法</strong>这一功能，也可以认为Lambda表达式代表一种<strong>动作</strong>，我们可以直接把这种特殊的动作进行传递。<br>当然，对于上面的Lambda表达式你可以简化：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Person.create(<span class="number">1</span>, <span class="string">&quot;张三&quot;</span>, person -&gt; System.out.println(<span class="string">&quot;去登陆...&quot;</span>));</span><br></pre></td></tr></table></figure>
-<p>这归功于Java8的类型推导机制。因为现在接口里只有一个方法，那么现在这个Lambda表达式肯定是对应实现了<br>这个方法，既然是唯一的对应关系，那么入参肯定是Person类，所以可以简写，并且方法体只有唯一的一条语<br>句，所以也可以简写，以达到表达式简洁的效果。</p>
+<p>这归功于Java8的类型推导机制。因为现在接口里只有一个方法，那么现在这个Lambda表达式肯定是对应实现了这个方法，既然是唯一的对应关系，那么入参肯定是Person类，所以可以简写，并且方法体只有唯一的一条语句，所以也可以简写，以达到表达式简洁的效果。</p>
 <h1 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h1><p>函数式接口是新增的一种接口定义。</p>
 <p>用<code>@FunctionalInterface</code>修饰的接口叫做函数式接口，或者，函数式接口就是一个<strong>只具有一个抽象方法的普通接口</strong>，<code>@FunctionalInterface</code>可以起到校验的作用。<br>下面的接口只有一个抽象方法能编译正确：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TestFunctionalInterface</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -170,9 +172,100 @@
       </tags>
   </entry>
   <entry>
+    <title>Linux环境常用中间件部署</title>
+    <url>/2022/08/18/Linux%E7%8E%AF%E5%A2%83%E5%B8%B8%E7%94%A8%E4%B8%AD%E9%97%B4%E4%BB%B6%E9%83%A8%E7%BD%B2/</url>
+    <content><![CDATA[<h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><p>安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo yum install -y gcc-c++ pcre pcre-devel zlib zlib-devel openssl openssl-devel wget</span><br><span class="line">wget http://nginx.org/download/nginx-1.22.0.tar.gz</span><br><span class="line">tar -zxvf nginx-1.22.0.tar.gz</span><br><span class="line">cd nginx-1.22.0</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">sudo ln -s /usr/local/nginx/sbin/nginx /usr/bin/nginx</span><br></pre></td></tr></table></figure>
+
+<p>验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx -v</span><br></pre></td></tr></table></figure>
+
+<p>启动</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="OpenJDK-1-8（或OpenJRE-1-8）"><a href="#OpenJDK-1-8（或OpenJRE-1-8）" class="headerlink" title="OpenJDK 1.8（或OpenJRE 1.8）"></a>OpenJDK 1.8（或OpenJRE 1.8）</h1><p>安装JDK</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo yum install -y java-1.8.0-openjdk-devel</span><br></pre></td></tr></table></figure>
+
+<p>或安装JRE</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo yum install -y java-1.8.0-openjdk</span><br></pre></td></tr></table></figure>
+
+<p>验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="Maven（可选，脚本自动化安装推荐）"><a href="#Maven（可选，脚本自动化安装推荐）" class="headerlink" title="Maven（可选，脚本自动化安装推荐）"></a>Maven（可选，脚本自动化安装推荐）</h1><p>依赖JDK（JRE不能完全支持），待安装JDK之后，Maven官网下载对应版本的bin包：<a href="https://maven.apache.org/download.cgi">https://maven.apache.org/download.cgi</a> 。以下以3.6.3举例：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz</span><br><span class="line">tar -zxvf apache-maven-3.6.3-bin.tar.gz</span><br><span class="line">sudo mv apache-maven-3.6.3 /opt/apache-maven-3.6.3</span><br><span class="line">sudo update-alternatives --install /usr/bin/mvn mvn /opt/apache-maven-3.6.3/bin/mvn 0</span><br></pre></td></tr></table></figure>
+<p>验证</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mvn -v</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="NodeJS（可选，脚本自动化安装推荐）"><a href="#NodeJS（可选，脚本自动化安装推荐）" class="headerlink" title="NodeJS（可选，脚本自动化安装推荐）"></a>NodeJS（可选，脚本自动化安装推荐）</h1><p>安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://nodejs.org/dist/v14.15.0/node-v14.15.0-linux-x64.tar.xz</span><br><span class="line">tar -Jxvf node-v14.15.0-linux-x64.tar.xz</span><br><span class="line">sudo mv node-v14.15.0-linux-x64 /opt/node-v14.15.0</span><br><span class="line">sudo ln -s /opt/node-v14.15.0/bin/node /usr/bin/node</span><br><span class="line">sudo ln -s /opt/node-v14.15.0/lib/node_modules/npm/bin/npm-cli.js /usr/bin/npm</span><br></pre></td></tr></table></figure>
+
+<p>验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="MySQL-5-7-x"><a href="#MySQL-5-7-x" class="headerlink" title="MySQL 5.7.x"></a>MySQL 5.7.x</h1><p>安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm</span><br><span class="line">sudo yum localinstall -y mysql-community-release-el7-5.noarch.rpm</span><br><span class="line">sudo yum install -y yum-utils</span><br><span class="line">sudo yum-config-manager --disable mysql56-community</span><br><span class="line">sudo yum-config-manager --enable mysql57-community-dmr</span><br><span class="line">sudo yum install -y mysql-server</span><br></pre></td></tr></table></figure>
+<p>如果出现未安装密钥的错误，请执行</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022</span><br></pre></td></tr></table></figure>
+
+<p>启动验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo service mysqld start</span><br></pre></td></tr></table></figure>
+
+<p>注意：初次安装好mysql server 5.7.x会随机生成root用户的登录密码，在修改root用户密码之前，不能进行任何有效操作，因此，需要使用控制台使用root用户登录并修改密码<br>查看随机密码<br>启动验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo grep &#x27;temporary password&#x27; /var/log/mysqld.log</span><br></pre></td></tr></table></figure>
+<p>登录成功后，使用命令修改密码，新密码请使用实际的密码替代：</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">alter<span class="built_in"> user </span>root@localhost identified by <span class="string">&#x27;新密码&#x27;</span>;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Redis-6-0"><a href="#Redis-6-0" class="headerlink" title="Redis 6.0"></a>Redis 6.0</h1><p>安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo yum -y install centos-release-scl scl-utils-build glibc-static libstdc++-static</span><br><span class="line">sudo yum -y install devtoolset-9-binutils devtoolset-9-gcc devtoolset-9-gcc-c++</span><br><span class="line">scl enable devtoolset-9 bash</span><br><span class="line">wget http://download.redis.io/releases/redis-6.0.6.tar.gz</span><br><span class="line">tar -zxvf redis-6.0.6.tar.gz</span><br><span class="line">sudo mv redis-6.0.6 /opt/</span><br><span class="line">cd /opt/redis-6.0.6</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<p>启动验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo redis-server /opt/redis-6.0.6/redis.conf &amp;</span><br></pre></td></tr></table></figure>
+
+<p>Redis配置和启动<br>使用编辑器打开Redis的配置文件（需要root权限，或sudo操作）：/opt/redis-6.0.6/redis.conf<br>根据实际情况修改以下内容：</p>
+<table>
+<thead>
+<tr>
+<th>修改前</th>
+<th>修改后</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>bind 127.0.0.1</code></td>
+<td><code># bind 127.0.0.1</code></td>
+<td>注释掉该行，取消只从本机访问的限制</td>
+</tr>
+<tr>
+<td><code># requirepass foobared</code></td>
+<td><code>requirepass 实际的密码</code></td>
+<td>“实际的密码“请根据实际情况进行配置，并取消该行的注释</td>
+</tr>
+</tbody></table>
+<p>重启Redis服务。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">redis-cli -a &#x27;实际的密码&#x27; shutdown</span><br><span class="line">sudo redis-server /opt/redis-6.0.6/redis.conf &amp;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h1><figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">./startup.sh -m standalone <span class="meta">&amp;</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">nohup java -Xms512m -Xmx1g -XX:<span class="attribute">MetaspaceSize</span>=128m -XX:<span class="attribute">MaxMetaspaceSize</span>=512m -Dfile.<span class="attribute">encoding</span>=utf-8 -Dlog.<span class="attribute">path</span>=./logs -jar cas-auth.jar &gt;/dev/<span class="literal">null</span> 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">java -javaagent:/data/apm-agent/elastic-apm-agent-1.33.0.jar -Delastic.apm.<span class="attribute">service_name</span>=cas-int-160 -Delastic.apm.<span class="attribute">server_urls</span>=http://172.16.40.163:8200 -Delastic.apm.<span class="attribute">environment</span>=staging -Delastic.apm.<span class="attribute">application_packages</span>=com.comac -Xms1g -Xmx2g -XX:<span class="attribute">MetaspaceSize</span>=128m -XX:<span class="attribute">MaxMetaspaceSize</span>=512m -Dfile.<span class="attribute">encoding</span>=utf-8 -Dlog.<span class="attribute">path</span>=./logs -jar cas-modules-system-exec.jar</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h1><figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line">#adduser tommy</span><br><span class="line"><span class="comment">//添加一个名为tommy的用户</span></span><br><span class="line">#passwd tommy <span class="comment">//修改密码</span></span><br><span class="line">Changing password for user tommy.</span><br><span class="line"><span class="literal">New</span> UNIX password: <span class="comment">//在这里输入新密码</span></span><br><span class="line">Retype <span class="literal">new</span> UNIX password: <span class="comment">//再次输入新密码</span></span><br><span class="line">passwd: <span class="literal">all</span> authentication tokens updated successfully.</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
     <title>SpringBoot2.X快速构建和配置</title>
     <url>/2020/11/03/SpringBoot2-X%E5%BF%AB%E9%80%9F%E6%9E%84%E5%BB%BA%E5%92%8C%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h1 id="SpringBoot是什么？"><a href="#SpringBoot是什么？" class="headerlink" title="SpringBoot是什么？"></a>SpringBoot是什么？</h1><p><img data-src="https://img-blog.csdnimg.cn/20181117220632243.png"><br>Spring Boot 是由 Pivotal 团队提供的全新框架。<br>Spring Boot 是所有基于 Spring Framework 5.0 开发的项目的起点。<br>Spring Boot 的设计是为了让你尽可能快的跑起来 Spring 应用程序并且尽可能减少你的配置文件。</p>
+<a id="more"></a>
+
 <p>从最根本上来讲，Spring Boot 就是一些库的集合，它能够被任意项目的构建系统所使用。它使用<em>习惯优于配置</em>（项目中存在大量的配置，此外还内置一个习惯性的配置）的理念让你的项目快速运行起来。用大佬的话来理解，就是 spring boot 其实不是什么新的框架，它默认配置了很多框架的使用方式，就像 maven 整合了所有的 jar 包，spring boot 整合了所有的框架，总结一下及几点：</p>
 <ol>
 <li>为所有 Spring 开发提供一个更快更广泛的入门体验。</li>
@@ -312,9 +405,150 @@
       </tags>
   </entry>
   <entry>
+    <title>Linux环境常用中间件部署（离线版）</title>
+    <url>/2022/08/29/Linux%E7%8E%AF%E5%A2%83%E5%B8%B8%E7%94%A8%E4%B8%AD%E9%97%B4%E4%BB%B6%E9%83%A8%E7%BD%B2%EF%BC%88%E7%A6%BB%E7%BA%BF%E7%89%88%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="JDK-1-8"><a href="#JDK-1-8" class="headerlink" title="JDK 1.8"></a>JDK 1.8</h1><ol>
+<li><p>去Oracle官网下载需要安装的jdk版本，我这里用的是jdk-linux-x64.tar.gz  </p>
+</li>
+<li><p>使用xshell或者FinalShell上传工具将jdk压缩包上传到新建的文件夹中，我这里是/home/java</p>
+</li>
+<li><p>将上传的压缩包进行解压</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">tar</span> <span class="selector-tag">-zxvf</span> <span class="selector-tag">jdk-linux-x64</span><span class="selector-class">.tar</span><span class="selector-class">.gz</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>进行编辑配置文件</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vi <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在配置文件末尾加上环境变量配置</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line"><span class="comment"># jdk的解压目录</span></span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">JAVA_HOME</span>=/home/java/jdk1.8.0_131</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">PATH</span>=<span class="variable">$PATH</span>:$JAVA_HOME/bin</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>刷新配置文件</p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line"><span class="keyword">source</span> <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<h1 id="MySQL-5-7-x"><a href="#MySQL-5-7-x" class="headerlink" title="MySQL 5.7.x"></a>MySQL 5.7.x</h1><ol>
+<li><p>卸载CentOS自带的mariadb-lib（执行<code>rpm -qa|grep mariadb</code>有对应信息才卸载，没有不需要执行卸载）：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">rpm</span> <span class="string">-qa|grep mariadb</span></span><br><span class="line"><span class="attr">rpm</span> <span class="string">-e --nodeps mariadb-libs-xxxxx</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解压后依次安装rpm包，由于rpm包有安装顺序，依次按顺序执行安装：</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-common-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-libs-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-client-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-server-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置my.cnf，开启表名忽略大小写(如果不需要此功能可以略过此步骤)：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vi <span class="regexp">/etc/my</span>.cnf</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>在[mysqld]下面加入：</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">lower_case_table_names</span> = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><p>启动验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo service mysqld start</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>登陆并修改密码<br>注意：初次安装好mysql server 5.7.x会随机生成root用户的登录密码，在修改root用户密码之前，不能进行任何有效操作，因此，需要使用控制台使用root用户登录并修改密码<br>查看随机密码<br>启动验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo grep &#x27;temporary password&#x27; /var/log/mysqld.log</span><br></pre></td></tr></table></figure>
+<p>登录成功后，使用命令修改密码，新密码请使用实际的密码替代：</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">alter<span class="built_in"> user </span>root@localhost identified by <span class="string">&#x27;新密码&#x27;</span>;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>开启远程登录授权</p>
+</li>
+</ol>
+<figure class="highlight n1ql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">schema</span> adms_system <span class="keyword">collate</span> utf8_general_ci;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Redis-6-0"><a href="#Redis-6-0" class="headerlink" title="Redis 6.0"></a>Redis 6.0</h1><p>安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tar -zxvf redis-6.0.6.tar.gz</span><br><span class="line">sudo mv redis-6.0.6 /opt/</span><br><span class="line">cd /opt/redis-6.0.6</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+
+<p>将命令设置为全局</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">ln -s <span class="regexp">/usr/</span>local<span class="regexp">/redis/</span>redis-<span class="number">6.2</span>.<span class="number">6</span><span class="regexp">/src/</span>redis-server <span class="regexp">/usr/</span>bin/redis-server</span><br></pre></td></tr></table></figure>
+
+<p>启动验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo redis-server /opt/redis-6.0.6/redis.conf &amp;</span><br></pre></td></tr></table></figure>
+
+<p>Redis配置和启动<br>使用编辑器打开Redis的配置文件（需要root权限，或sudo操作）：/opt/redis-6.0.6/redis.conf<br>根据实际情况修改以下内容：</p>
+<table>
+<thead>
+<tr>
+<th>修改前</th>
+<th>修改后</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>bind 127.0.0.1</code></td>
+<td><code># bind 127.0.0.1</code></td>
+<td>注释掉该行，取消只从本机访问的限制</td>
+</tr>
+<tr>
+<td><code># requirepass foobared</code></td>
+<td><code>requirepass 实际的密码</code></td>
+<td>“实际的密码“请根据实际情况进行配置，并取消该行的注释</td>
+</tr>
+</tbody></table>
+<p>重启Redis服务。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">redis-cli -a &#x27;实际的密码&#x27; shutdown</span><br><span class="line">sudo redis-server /opt/redis-6.0.6/redis.conf &amp;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h1><figure class="highlight 1c"><table><tr><td class="code"><pre><span class="line">./startup.sh -m standalone <span class="meta">&amp;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><p>安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tar -zxvf nginx-1.22.0.tar.gz</span><br><span class="line">cd nginx-1.22.0</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">sudo ln -s /usr/local/nginx/sbin/nginx /usr/bin/nginx</span><br></pre></td></tr></table></figure>
+
+<p>验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx -v</span><br></pre></td></tr></table></figure>
+
+<p>启动</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx</span><br></pre></td></tr></table></figure>
+
+<p>配置修改</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">listen</span>       <span class="number">28080</span>;</span><br><span class="line"></span><br><span class="line"><span class="attribute">location</span> / &#123;</span><br><span class="line">    <span class="attribute">etag</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">root</span>   /data/adms/web/dist;</span><br><span class="line">    <span class="attribute">index</span>  index.html index.htm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attribute">location</span><span class="regexp"> ^~/prod-api/</span> &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span>              http://127.0.0.1:8080/;</span><br><span class="line">    <span class="attribute">proxy_http_version</span>      <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span>        Upgrade         <span class="variable">$http_upgrade</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span>        Connection      <span class="string">&quot;upgrade&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">nohup java -Xms512m -Xmx1g -XX:<span class="attribute">MetaspaceSize</span>=128m -XX:<span class="attribute">MaxMetaspaceSize</span>=512m -Dfile.<span class="attribute">encoding</span>=utf-8 -Dlog.<span class="attribute">path</span>=./logs -jar cas-auth.jar &gt;/dev/<span class="literal">null</span> 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">java -javaagent:/data/apm-agent/elastic-apm-agent-1.33.0.jar -Delastic.apm.<span class="attribute">service_name</span>=cas-int-160 -Delastic.apm.<span class="attribute">server_urls</span>=http://172.16.40.163:8200 -Delastic.apm.<span class="attribute">environment</span>=staging -Delastic.apm.<span class="attribute">application_packages</span>=com.comac -Xms1g -Xmx2g -XX:<span class="attribute">MetaspaceSize</span>=128m -XX:<span class="attribute">MaxMetaspaceSize</span>=512m -Dfile.<span class="attribute">encoding</span>=utf-8 -Dlog.<span class="attribute">path</span>=./logs -jar cas-modules-system-exec.jar</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h1><figure class="highlight lasso"><table><tr><td class="code"><pre><span class="line">#adduser tommy</span><br><span class="line"><span class="comment">//添加一个名为tommy的用户</span></span><br><span class="line">#passwd tommy <span class="comment">//修改密码</span></span><br><span class="line">Changing password for user tommy.</span><br><span class="line"><span class="literal">New</span> UNIX password: <span class="comment">//在这里输入新密码</span></span><br><span class="line">Retype <span class="literal">new</span> UNIX password: <span class="comment">//再次输入新密码</span></span><br><span class="line">passwd: <span class="literal">all</span> authentication tokens updated successfully.</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h1><ol>
+<li><p>开启防火墙 </p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> firewalld</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>开放指定端口</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=1935/tcp --permanent</span><br></pre></td></tr></table></figure>
+<p>命令含义：  </p>
+</li>
+</ol>
+<p>–zone #作用域<br>–add-port=1935/tcp  #添加端口，格式为：端口/通讯协议<br>–permanent  #永久生效，没有此参数重启后失效  </p>
+<ol start="3">
+<li>重启防火墙<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --reload</span></span><br></pre></td></tr></table></figure></li>
+<li>查看端口号<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line"><span class="regexp">//</span>查看当前所有tcp端口</span><br><span class="line"></span><br><span class="line">netstat -ntlp</span><br><span class="line"></span><br><span class="line"><span class="regexp">//</span>查看所有<span class="number">1935</span>端口使用情况</span><br><span class="line"></span><br><span class="line">netstat -ntulp |grep <span class="number">1935</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+</li>
+</ol>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1>]]></content>
+  </entry>
+  <entry>
     <title>SpringCloud组件之eureka（注册中心）</title>
     <url>/2020/10/27/SpringCloud%E7%BB%84%E4%BB%B6%E4%B9%8Beureka%EF%BC%88%E6%90%AD%E5%BB%BA%E3%80%81%E9%9B%86%E7%BE%A4%E3%80%81%E5%BF%83%E8%B7%B3%EF%BC%89/</url>
     <content><![CDATA[<h1 id="eureka"><a href="#eureka" class="headerlink" title="eureka"></a>eureka</h1><h2 id="eureka是什么？"><a href="#eureka是什么？" class="headerlink" title="eureka是什么？"></a>eureka是什么？</h2><p>eureka是Netflix的子模块之一，也是一个核心的模块，eureka里有2个组件，一个是EurekaServer(一个独立的项目) 这个是用于定位服务以实现中间层服务器的负载平衡和故障转移，另一个便是EurekaClient（我们的微服务）它是用于与Server交互的，可以使得交互变得非常简单：只需要通过服务标识符即可拿到服务。</p>
+<a id="more"></a>
+
 <h2 id="与spring-cloud的关系"><a href="#与spring-cloud的关系" class="headerlink" title="与spring-cloud的关系"></a>与spring-cloud的关系</h2><p>Spring Cloud 封装了 Netflix 公司开发的 Eureka 模块来实现服务注册和发现(可以对比Zookeeper)。<br>Eureka 采用了 C-S 的设计架构。Eureka Server 作为服务注册功能的服务器，它是服务注册中心。<br>而系统中的其他微服务，使用 Eureka 的客户端连接到 Eureka Server并维持心跳连接。这样系统的维护人员就可以通过 Eureka Server 来监控系统中各个微服务是否正常运行。SpringCloud 的一些其他模块（比如Zuul）就可以通过 Eureka Server 来发现系统中的其他微服务，并执行相关的逻辑。</p>
 <h2 id="eureka角色关系"><a href="#eureka角色关系" class="headerlink" title="eureka角色关系"></a>eureka角色关系</h2><p><img data-src="https://i.loli.net/2020/10/27/fTMlspmcJDznq9i.png" alt="eureka角色关系.png"></p>
 <h2 id="如何使用？"><a href="#如何使用？" class="headerlink" title="如何使用？"></a>如何使用？</h2><p>在spring-cloud项目里面加入依赖：<br>eureka客户端：</p>
@@ -398,17 +632,759 @@
 <li>Linux 用户：sudo apt-get install git</li>
 <li>Windows 用户：下载 <a href="https://git-scm.com/">Git</a>，对于 Windows 用户，安装后如果希望在全局的 cmd 中使用 git，需要把 git.exe 加入 PATH 环境变量中，或在 Git Bash 中使用 Git。</li>
 </ul>
-<h2 id="检出仓库"><a href="#检出仓库" class="headerlink" title="检出仓库"></a>检出仓库</h2><h2 id="创建新仓库"><a href="#创建新仓库" class="headerlink" title="创建新仓库"></a>创建新仓库</h2><h2 id="工作流"><a href="#工作流" class="headerlink" title="工作流"></a>工作流</h2><p>你的本地仓库由 git 维护的三棵“树”组成。第一个是你的 工作目录，它持有实际文件；第二个是 缓存区（Index），它像个缓存区域，临时保存你的改动；最后是 HEAD，指向你最近一次提交后的结果。<br><img data-src="https://camo.githubusercontent.com/6e52beb12c47b2972937c8ae214e21eaa3647777c28936925ebf78ca0038157c/687474703a2f2f7777772e626f6f746373732e636f6d2f702f6769742d67756964652f696d672f74726565732e706e67" alt="图"></p>
-<h2 id="添加与提交"><a href="#添加与提交" class="headerlink" title="添加与提交"></a>添加与提交</h2><p>执行如下命令以创建一个本地仓库的克隆版本： <code>git clone /path/to/repository</code></p>
-<p>如果是远端服务器上的仓库，你的命令会是这个样子： <code>git clone username@host:/path/to/repository</code> （通过 SSH） 或者： <code>git clone https:/path/to/repository.git</code> （通过 https）</p>
-<p>比如说 <code>git clone https://github.com/geeeeeeeeek/git-recipes.git</code> 可以将 git 教程 clone 到你指定的目录。</p>
-<h2 id="推送改动"><a href="#推送改动" class="headerlink" title="推送改动"></a>推送改动</h2><h1 id="创建代码仓库"><a href="#创建代码仓库" class="headerlink" title="创建代码仓库"></a>创建代码仓库</h1><h1 id="保存你的更改"><a href="#保存你的更改" class="headerlink" title="保存你的更改"></a>保存你的更改</h1><h1 id="检查仓库状态"><a href="#检查仓库状态" class="headerlink" title="检查仓库状态"></a>检查仓库状态</h1><h1 id="检出之前的提交"><a href="#检出之前的提交" class="headerlink" title="检出之前的提交"></a>检出之前的提交</h1><h1 id="回滚错误的修改"><a href="#回滚错误的修改" class="headerlink" title="回滚错误的修改"></a>回滚错误的修改</h1><h1 id="重写项目历史"><a href="#重写项目历史" class="headerlink" title="重写项目历史"></a>重写项目历史</h1>]]></content>
+<h2 id="检出仓库"><a href="#检出仓库" class="headerlink" title="检出仓库"></a>检出仓库</h2><p>执行如下命令以创建一个本地仓库的克隆版本： <code>git clone /path/to/repository</code><br>如果是远端服务器上的仓库，你的命令会是这个样子： <code>git clone username@host:/path/to/repository</code> （通过 SSH） 或者： <code>git clone https:/path/to/repository.git</code> （通过 https）</p>
+<h2 id="创建新仓库"><a href="#创建新仓库" class="headerlink" title="创建新仓库"></a>创建新仓库</h2><p>创建新文件夹，打开，然后执行 <code>git init</code> 以创建新的 git 仓库。</p>
+<h2 id="工作流"><a href="#工作流" class="headerlink" title="工作流"></a>工作流</h2><p>你的本地仓库由 git 维护的三棵“树”组成。第一个是你的 工作目录，它持有实际文件；第二个是 缓存区（Index），它像个缓存区域，临时保存你的改动；最后是 HEAD，指向你最近一次提交后的结果。<br><img data-src="https://camo.githubusercontent.com/6e52beb12c47b2972937c8ae214e21eaa3647777c28936925ebf78ca0038157c/687474703a2f2f7777772e626f6f746373732e636f6d2f702f6769742d67756964652f696d672f74726565732e706e67" alt="图"></p>
+<p>事实上，第三个阶段是 commit history 的图。HEAD 一般是指向最新一次 commit 的引用。现在暂时不必究其细节。</p>
+<h2 id="添加与提交"><a href="#添加与提交" class="headerlink" title="添加与提交"></a>添加与提交</h2><p>你可以计划改动（把它们添加到缓存区），使用如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git add &lt; filename &gt;</span><br><span class="line">git add *</span><br></pre></td></tr></table></figure>
+<p>这是 git 基本工作流程的第一步。使用如下命令以实际提交改动：</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">git</span> commit -m <span class="string">&quot;代码提交信息&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在开发时，良好的习惯是根据工作进度及时 commit，并务必注意附上有意义的 commit message。创建完项目目录后，第一次提交的 commit message 一般为「Initial commit.」。</p>
+</blockquote>
+<h2 id="推送改动"><a href="#推送改动" class="headerlink" title="推送改动"></a>推送改动</h2><p>你的改动现在已经在本地仓库的 HEAD 中了。执行如下命令以将这些改动提交到远端仓库：</p>
+<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">push</span> <span class="built_in">origin</span> master</span><br></pre></td></tr></table></figure>
+<p>可以把 master 换成你想要推送的任何分支。</p>
+<p>如果你还没有克隆现有仓库，并欲将你的仓库连接到某个远程服务器，你可以使用如下命令添加：</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">git remote <span class="keyword">add</span><span class="bash"> origin &lt;server&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如此你就能够将你的改动推送到所添加的服务器上去了。</p>
+<blockquote>
+<ul>
+<li>这里 origin 是 &lt; server &gt; 的别名，取什么名字都可以，你也可以在 push 时将 &lt; server &gt; 替换为 origin。但为了以后 push 方便，我们第一次一般都会先 remote add。</li>
+<li>如果你还没有 git 仓库，可以在 GitHub 等代码托管平台上创建一个空（不要自动生成 README.md）的 repository，然后将代码 push 到远端仓库。</li>
+</ul>
+</blockquote>
+<h1 id="创建代码仓库"><a href="#创建代码仓库" class="headerlink" title="创建代码仓库"></a>创建代码仓库</h1><h2 id="git-init"><a href="#git-init" class="headerlink" title="git init"></a>git init</h2><h2 id="git-clone"><a href="#git-clone" class="headerlink" title="git clone"></a>git clone</h2><h1 id="保存你的更改"><a href="#保存你的更改" class="headerlink" title="保存你的更改"></a>保存你的更改</h1><h1 id="检查仓库状态"><a href="#检查仓库状态" class="headerlink" title="检查仓库状态"></a>检查仓库状态</h1><h1 id="检出之前的提交"><a href="#检出之前的提交" class="headerlink" title="检出之前的提交"></a>检出之前的提交</h1><h1 id="回滚错误的修改"><a href="#回滚错误的修改" class="headerlink" title="回滚错误的修改"></a>回滚错误的修改</h1><h1 id="重写项目历史"><a href="#重写项目历史" class="headerlink" title="重写项目历史"></a>重写项目历史</h1>]]></content>
       <categories>
         <category>Git</category>
       </categories>
       <tags>
         <tag>git</tag>
         <tag>从零搭建本地代码仓库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CAS系统服务器部署文档（Cylin系统）</title>
+    <url>/2022/08/31/CAS%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3%EF%BC%88Cylin%E7%B3%BB%E7%BB%9F%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><h2 id="安装包明细"><a href="#安装包明细" class="headerlink" title="安装包明细"></a>安装包明细</h2><figure class="highlight text"><table><tr><td class="code"><pre><span class="line">data</span><br><span class="line">  ├── adms                                                </span><br><span class="line">  │     ├── server                                        </span><br><span class="line">  │     │     └── server.tar.gz                           // 应用后端代码</span><br><span class="line">  │     │ </span><br><span class="line">  │     └── web                                           </span><br><span class="line">  │           └── dist.tar.gz                             // 应用web端代码</span><br><span class="line">  │</span><br><span class="line">  ├── java                                                </span><br><span class="line">  │     └── jdk-8u341-linux-x64.tar.gz                    // jdk压缩包</span><br><span class="line">  │</span><br><span class="line">  ├── mysql                                               </span><br><span class="line">  │     └── mysql-5.7.38-1.el7.x86_64.rpm-bundle.tar      // Mysql数据库程序包</span><br><span class="line">  │</span><br><span class="line">  ├── nacos                                               </span><br><span class="line">  │     └── nacos-server-2.0.3.tar.gz                     // Nacos程序包</span><br><span class="line">  │</span><br><span class="line">  ├── nginx                                               </span><br><span class="line">  │     └── nginx-1.22.0.tar.gz                           // Nginx程序包</span><br><span class="line">  │</span><br><span class="line">  ├── redis                                               </span><br><span class="line">  │     └── redis-6.2.7.tar.gz                            // Redis程序包</span><br><span class="line">  │</span><br><span class="line">  └── tools</span><br><span class="line">        ├── lsof-4.93.2-4.ky10.x86_64.rpm                 </span><br><span class="line">        ├── net-tools-2.0-0.54.ky10.x86_64.rpm            // 网络工具</span><br><span class="line">        ├── tar-1.32-2.ky10.x86_64.rpm                    // 解压工具</span><br><span class="line">        ├── telnet-0.17-76.ky10.x86_64.rpm                </span><br><span class="line">        └── vim-enhanced-8.2-34.p01.ky10.x86_64.rpm       // 文本编辑器</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p>将安装包上传到服务器上：</p>
+<h3 id="Windows用户操作步骤"><a href="#Windows用户操作步骤" class="headerlink" title="Windows用户操作步骤:"></a>Windows用户操作步骤:</h3><p>使用shell工具和ftp工具（推荐使用<code>Xshell</code>工具和<code>Xftp</code>工具），将文件上传到服务器<code>/</code>目录（由于篇幅有限，关于shell工具及ftp工具的使用，请自行查找资料）</p>
+<h3 id="Mac、Linux用户操作步骤，在用户本地电脑执行以下命令："><a href="#Mac、Linux用户操作步骤，在用户本地电脑执行以下命令：" class="headerlink" title="Mac、Linux用户操作步骤，在用户本地电脑执行以下命令："></a>Mac、Linux用户操作步骤，在用户本地电脑执行以下命令：</h3><figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">scp -r /cas-relase<span class="number">-2.5</span>-cylin <span class="symbol">root@</span><span class="number">172.16</span><span class="number">.40</span><span class="number">.164</span>:/</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-r</td>
+<td>将文件夹内所有内容上传到服务器</td>
+</tr>
+<tr>
+<td>/cas-relase-2.5-cylin</td>
+<td>安装包目录位置</td>
+</tr>
+<tr>
+<td>root</td>
+<td>服务器登录账户</td>
+</tr>
+<tr>
+<td>172.16.40.164</td>
+<td>服务器IP地址</td>
+</tr>
+<tr>
+<td>/</td>
+<td>上传到服务器的目录</td>
+</tr>
+</tbody></table>
+<p>之后输入该用户登录密码（Linux系统命令行不会显示你输入的密码，但其实已经输入成功），按Enter键完成输入</p>
+<h2 id="安装常用工具"><a href="#安装常用工具" class="headerlink" title="安装常用工具"></a>安装常用工具</h2><blockquote>
+<p>若服务器安装操作系统时已经安装下列工具，可跳过此步骤</p>
+</blockquote>
+<p>进入常用工具文件夹</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">cd <span class="regexp">/data/</span>tools</span><br></pre></td></tr></table></figure>
+<p>分别执行以下命令，安装各个工具</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">rpm</span> -ivh tar-<span class="number">1</span>.<span class="number">32</span>-<span class="number">2</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh vim-enhanced-<span class="number">8</span>.<span class="number">2</span>-<span class="number">34</span>.p<span class="number">01</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh net-tools-<span class="number">2</span>.<span class="number">0</span>-<span class="number">0</span>.<span class="number">54</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh telnet-<span class="number">0</span>.<span class="number">17</span>-<span class="number">76</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh telnet-<span class="number">0</span>.<span class="number">17</span>-<span class="number">76</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh lsof-<span class="number">4</span>.<span class="number">93</span>.<span class="number">2</span>-<span class="number">4</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h2><h3 id="登录服务器"><a href="#登录服务器" class="headerlink" title="登录服务器"></a>登录服务器</h3><figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">ssh <span class="symbol">root@</span><span class="number">172.16</span><span class="number">.40</span><span class="number">.164</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>root</td>
+<td>服务器登录账户</td>
+</tr>
+<tr>
+<td>172.16.40.164</td>
+<td>服务器IP地址</td>
+</tr>
+</tbody></table>
+<p>之后输入该用户登录密码（Linux系统命令行不会显示你输入的密码，但其实已经输入成功），按Enter键完成输入</p>
+<h3 id="新建用户-1"><a href="#新建用户-1" class="headerlink" title="新建用户"></a>新建用户</h3><p>添加一个名为comac的用户</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">adduser comac</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">passwd comac</span></span><br></pre></td></tr></table></figure>
+<p>根据提示，输入新的密码（Linux系统命令行不会显示你输入的密码）</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">更改用户 comac 的密码 。</span><br><span class="line">新的 密码：<span class="regexp">//</span>在这里输入新密码</span><br><span class="line">重新输入新的 密码：<span class="regexp">//</span>再次输入新密码</span><br><span class="line">passwd：所有的身份验证令牌已经成功更新。</span><br></pre></td></tr></table></figure>
+
+<h3 id="赋予sudo权限"><a href="#赋予sudo权限" class="headerlink" title="赋予sudo权限"></a>赋予sudo权限</h3><p>修改 /etc/sudoers 文件，找到下面一行，在root下面添加一行，如下所示：</p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line"># Allow root <span class="keyword">to</span> run <span class="keyword">any</span> commands anywhere</span><br><span class="line">root      <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br><span class="line">comac     <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     NOPASSWD:<span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
+<p>以下以vim工具为例（vi/vim工具是Linux系统中最普及、最常用的文本编辑器，由于篇幅有限，不在本文教学，有兴趣可以在网上了解相关资料及教程）</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>sudoers</span><br></pre></td></tr></table></figure>
+<p>按下<code>i</code>键后进入编辑模式，修改完成后，按下<code>esc</code>键，输入<code>:wq!</code>后，按<code>Enter</code>键保存并退出</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>按下<code>i</code>键</td>
+<td>进入编辑器的编辑模式</td>
+</tr>
+<tr>
+<td>按下<code>esc</code>键，输入<code>:</code></td>
+<td>进入编辑器的指令模式</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>保存修改内容</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>退出</td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td>强制执行指令</td>
+</tr>
+</tbody></table>
+<h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">su comac</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：后续操作理论上都应该使用comac用户操作，过高的权限往往伴随着更高的风险，能力越大责任越大</p>
+</blockquote>
+<h1 id="JDK安装"><a href="#JDK安装" class="headerlink" title="JDK安装"></a>JDK安装</h1><p>执行以下命令进入java文件夹</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">cd <span class="regexp">/data/</span>java</span><br></pre></td></tr></table></figure>
+
+<p>解压jdk压缩包</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">tar</span> -zxvf jdk-<span class="number">8</span>u<span class="number">341</span>-linux-x<span class="number">64</span>.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>编辑<code>/etc/profile</code>系统配置文件，将jdk添加到环境变量</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
+
+<p>按下<code>i</code>键后进入编辑模式，在配置文件末尾加上环境变量配置</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line"><span class="comment"># jdk的解压目录</span></span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">JAVA_HOME</span>=/data/java/jdk1.8.0_341</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">PATH</span>=<span class="variable">$PATH</span>:$JAVA_HOME/bin</span><br></pre></td></tr></table></figure>
+<p>修改完成后，按下<code>esc</code>键，输入<code>:wq</code>后，按<code>Enter</code>键保存并退出</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>按下<code>i</code>键</td>
+<td>进入编辑器的编辑模式</td>
+</tr>
+<tr>
+<td>按下<code>esc</code>键，输入<code>:</code></td>
+<td>进入编辑器的指令模式</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>保存修改内容</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>退出</td>
+</tr>
+</tbody></table>
+<p>刷新配置文件</p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line"><span class="keyword">source</span> <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
+
+<p>验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure>
+<p>显示jdk版本信息即为成功</p>
+<h1 id="Mysql安装"><a href="#Mysql安装" class="headerlink" title="Mysql安装"></a>Mysql安装</h1><p>进入mysql文件夹，解压mysql程序包</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">cd</span> /data/mysql</span><br><span class="line"><span class="attribute">tar</span> -zxvf mysql-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm-bundle.tar</span><br></pre></td></tr></table></figure>
+<p>解压后依次安装rpm包，由于rpm包有安装顺序，依次按顺序执行安装</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">cd</span> mysql-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm-bundle/</span><br><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-common-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-libs-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-client-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-server-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br></pre></td></tr></table></figure>
+<p>配置my.cnf，开启表名忽略大小写(如果不需要此功能可以略过此步骤)</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">sudo vim <span class="regexp">/etc/my</span>.cnf</span><br></pre></td></tr></table></figure>
+
+<p>在<code>[mysqld]</code>下面加入：</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">lower_case_table_names</span> = <span class="number">1</span></span><br><span class="line"><span class="attr">default-time_zone</span> = <span class="string">&#x27;+8:00&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>启动mysql服务</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">sudo<span class="built_in"> service </span>mysqld start</span><br></pre></td></tr></table></figure>
+
+<p>登陆并修改密码  </p>
+<blockquote>
+<p>注意：初次安装好mysql server 5.7.x会随机生成root用户的登录密码，在修改root用户密码之前，不能进行任何有效操作，因此，需要使用控制台使用root用户登录并修改密码</p>
+</blockquote>
+<p>查看随机密码，执行以下命令，命令行会打印出mysql随机生成的root用户的登录密码</p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">sudo <span class="keyword">grep</span> <span class="string">&#x27;temporary password&#x27;</span> <span class="regexp">/var/</span>log/mysqld.log</span><br></pre></td></tr></table></figure>
+<p>登录mysql</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">mysql -uroot -p</span></span><br></pre></td></tr></table></figure>
+<p>之后输入该用户登录密码（Linux系统命令行不会显示你输入的密码，但其实已经输入成功），按Enter键完成输入</p>
+<p>登录成功后，使用命令修改密码，新密码请使用实际的密码替代：</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">alter<span class="built_in"> user </span>root@localhost identified by <span class="string">&#x27;新密码&#x27;</span>;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+
+<p>退出mysql</p>
+<figure class="highlight cos"><table><tr><td class="code"><pre><span class="line"><span class="keyword">quit</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><p>安装</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">cd</span> /data/redis</span><br><span class="line"><span class="attribute">tar</span> -zxvf redis-<span class="number">6</span>.<span class="number">2</span>.<span class="number">7</span>.tar.gz</span><br><span class="line"><span class="attribute">cd</span> /data/redis/redis-<span class="number">6</span>.<span class="number">2</span>.<span class="number">7</span></span><br><span class="line"><span class="attribute">make</span></span><br><span class="line"><span class="attribute">sudo</span> make install</span><br></pre></td></tr></table></figure>
+
+
+
+
+<p>将命令设置为全局</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">ln -s <span class="regexp">/usr/</span>local<span class="regexp">/redis/</span>redis-<span class="number">6.2</span>.<span class="number">7</span><span class="regexp">/src/</span>redis-server <span class="regexp">/usr/</span>bin/redis-server</span><br></pre></td></tr></table></figure>
+
+<p>启动验证</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">sudo redis-server <span class="regexp">/data/</span>redis<span class="regexp">/redis-6.2.7/</span>redis.conf &amp;</span><br></pre></td></tr></table></figure>
+
+<p>Redis配置和启动<br>使用编辑器打开Redis的配置文件（需要root权限，或sudo操作）：/data/redis/redis-6.2.7/redis.conf<br>根据实际情况修改以下内容：</p>
+<table>
+<thead>
+<tr>
+<th>修改前</th>
+<th>修改后</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>bind 127.0.0.1</code></td>
+<td><code># bind 127.0.0.1</code></td>
+<td>注释掉该行，取消只从本机访问的限制</td>
+</tr>
+<tr>
+<td><code># requirepass foobared</code></td>
+<td><code>requirepass 实际的密码</code></td>
+<td>“实际的密码“请根据实际情况进行配置，并取消该行的注释</td>
+</tr>
+</tbody></table>
+<h1 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h1><p>解压nacos</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">cd</span> /data/nacos</span><br><span class="line"><span class="attribute">tar</span> -zxvf nacos-server-<span class="number">2</span>.<span class="number">0</span>.<span class="number">3</span>.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>启动nacos服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">// 进入nacos执行程序目录</span><br><span class="line"><span class="built_in">cd</span> /data/nacos/nacos-server-2.0.3/bin</span><br><span class="line"></span><br><span class="line">// 启动</span><br><span class="line">./startup.sh -m standalone &amp;</span><br></pre></td></tr></table></figure>
+
+<p>Nacos的使用</p>
+<p>想要登录nacos需要开放服务器防火墙的<code>8848</code>端口，具体操作见防火墙章节</p>
+<p>开通<code>8848</code>端口后，在用户本地的浏览器访问<code>http://localhost:8848/nacos</code>，其中<code>localhost</code>请改为实际服务器IP</p>
+<p>随后输入账号密码登录<br>默认账号、密码分别为<code>nacos</code>，<code>nacos</code></p>
+<h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><p>安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /data/nginx</span><br><span class="line">tar -zxvf nginx-1.22.0.tar.gz</span><br><span class="line">cd nginx-1.22.0</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">sudo ln -s /usr/local/nginx/sbin/nginx /usr/bin/nginx</span><br></pre></td></tr></table></figure>
+
+<p>验证，显示nginx的版本号即为成功</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx -v</span><br></pre></td></tr></table></figure>
+
+<p>启动</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="应用程序安装"><a href="#应用程序安装" class="headerlink" title="应用程序安装"></a>应用程序安装</h1><h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><p>登录mysql</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">mysql -uroot -p</span></span><br></pre></td></tr></table></figure>
+<p>之后输入该用户登录密码（Linux系统命令行不会显示你输入的密码，但其实已经输入成功），按Enter键完成输入</p>
+<p>创建业务数据库</p>
+<figure class="highlight n1ql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">schema</span> adms_system <span class="keyword">collate</span> utf8_general_ci;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>adms_system</td>
+<td>新建数据库名</td>
+</tr>
+<tr>
+<td>utf8_general_ci</td>
+<td>数据所用字符集</td>
+</tr>
+</tbody></table>
+<p>切换到新创建的数据库</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">adms_system</span>;</span><br></pre></td></tr></table></figure>
+
+<p>导入业务数据库</p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line"><span class="keyword">source</span> <span class="regexp">/data/</span>adms<span class="regexp">/server/</span>sql/adms_system.sql;</span><br></pre></td></tr></table></figure>
+
+<p>检查执行结果</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">tables</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h2><h3 id="解压压缩文件"><a href="#解压压缩文件" class="headerlink" title="解压压缩文件"></a>解压压缩文件</h3><figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">cd /data/adms/server</span><br><span class="line">tar -zxvf server.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="Nacos配置修改"><a href="#Nacos配置修改" class="headerlink" title="Nacos配置修改"></a>Nacos配置修改</h3><p>登录Nacos后，在<code>配置管理</code>-&gt;<code>配置列表</code>模块中添加3个配置<br>命令|说明<br>-|-<br>adms-system-int.yml|系统核心模块配置<br>adms-gateway-int.yml|网关配置<br>adms-auth-int.yml|权限中心配置</p>
+<p>配置具体内容在/adms/server/nacos_config目录下，注意需要根据实际情况修改</p>
+<figure class="highlight dts"><table><tr><td class="code"><pre><span class="line"><span class="symbol">redis:</span></span><br><span class="line"><span class="symbol">  host:</span> localhost</span><br><span class="line"><span class="symbol">  port:</span> <span class="number">6379</span></span><br><span class="line"><span class="symbol">  password:</span> <span class="comment">// Redis的实际密码，若未设密码则不填</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">datasource:</span><br><span class="line">  # 主库数据源</span><br><span class="line">  master:</span><br><span class="line">    driver-class-name: com.mysql.cj.jdbc.Driver</span><br><span class="line">    url: jdbc:mysql://localhost:<span class="number">3306</span>/adms_system?useUnicode=<span class="literal">true</span>&amp;characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;useSSL=<span class="literal">true</span>&amp;serverTimezone=GMT%<span class="number">2B8</span></span><br><span class="line">    username: root     // 数据库的登录账户</span><br><span class="line">    password: <span class="number">123456</span>   // 数据库实际密码</span><br></pre></td></tr></table></figure>
+<p>其中adms_system改为实际的数据库名</p>
+<p>配置格式勾选YAML后发布（三个配置操作相似）</p>
+<h3 id="启动应用服务"><a href="#启动应用服务" class="headerlink" title="启动应用服务"></a>启动应用服务</h3><p>启动权限中心服务</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">cd /data/adms/server/auth</span><br><span class="line">nohup java -Xms512m -Xmx1g -XX:<span class="attribute">MetaspaceSize</span>=128m -XX:<span class="attribute">MaxMetaspaceSize</span>=512m -Dfile.<span class="attribute">encoding</span>=utf-8 -Dlog.<span class="attribute">path</span>=./logs -jar cas-auth.jar &gt;/dev/<span class="literal">null</span> 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p>启动网关服务ww</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">cd /data/adms/server/gateway</span><br><span class="line">nohup java -Xms512m -Xmx1g -XX:<span class="attribute">MetaspaceSize</span>=128m -XX:<span class="attribute">MaxMetaspaceSize</span>=512m -Dfile.<span class="attribute">encoding</span>=utf-8 -Dlog.<span class="attribute">path</span>=./logs -jar cas-gateway.jar &gt;/dev/<span class="literal">null</span> 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p>启动核心应用服务</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">cd /data/adms/server/system</span><br><span class="line">nohup java -Xms512m -Xmx1g -XX:<span class="attribute">MetaspaceSize</span>=128m -XX:<span class="attribute">MaxMetaspaceSize</span>=512m -Dfile.<span class="attribute">encoding</span>=utf-8 -Dlog.<span class="attribute">path</span>=./logs -jar cas-auth.jar &gt;/dev/<span class="literal">null</span> 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+
+<p>可以登录nacos后在<code>服务管理</code>-&gt;<code>服务列表</code>中查看服务是否启动成功</p>
+<h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><p>解压压缩文件</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">cd <span class="regexp">/data/</span>adms/web</span><br><span class="line">tar -zxvf dist.tar.gz</span><br></pre></td></tr></table></figure>
+
+
+<p>修改Nginx配置文件</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/usr/</span>local<span class="regexp">/nginx/</span>conf/nginx.conf</span><br></pre></td></tr></table></figure>
+
+<p>修改内容如下：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">listen       <span class="number">28080</span>;                    <span class="regexp">//</span> 浏览器访问的端口</span><br><span class="line"></span><br><span class="line">location / &#123;</span><br><span class="line">    etag   on;</span><br><span class="line">    root   <span class="regexp">/data/</span>adms<span class="regexp">/web/</span>dist;        <span class="regexp">//</span> 前端代码所在目录</span><br><span class="line">    index  index.html index.htm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="regexp">//</span> 添加以下代理配置</span><br><span class="line">location ^~<span class="regexp">/prod-api/</span> &#123;</span><br><span class="line">    proxy_pass              http:<span class="regexp">//</span><span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">8080</span>/;</span><br><span class="line">    proxy_http_version      <span class="number">1.1</span>;</span><br><span class="line">    proxy_set_header        Upgrade         <span class="variable">$http_upgrade</span>;</span><br><span class="line">    proxy_set_header        Connection      <span class="string">&quot;upgrade&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重写启动Nginx</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">sudo nginx -s reload</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h1><p>开启防火墙 </p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> firewalld</span><br></pre></td></tr></table></figure>
+
+<p>开放指定端口</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=1935/tcp --permanent</span><br></pre></td></tr></table></figure>
+<p>命令含义：<br>–zone #作用域<br>–add-port=1935/tcp  #添加端口，格式为：端口/通讯协议<br>–permanent  #永久生效，没有此参数重启后失效  </p>
+<p>重启防火墙</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --reload</span></span><br></pre></td></tr></table></figure>
+<p>查看端口号</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line"><span class="regexp">//</span>查看当前所有tcp端口</span><br><span class="line"></span><br><span class="line">netstat -ntlp</span><br><span class="line"></span><br><span class="line"><span class="regexp">//</span>查看所有<span class="number">1935</span>端口使用情况</span><br><span class="line"></span><br><span class="line">netstat -ntulp |grep <span class="number">1935</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="Linux系统的一些常用命令"><a href="#Linux系统的一些常用命令" class="headerlink" title="Linux系统的一些常用命令"></a>Linux系统的一些常用命令</h1><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ls</code></td>
+<td>打印当前目录的文件及文件夹</td>
+</tr>
+<tr>
+<td><code>ll</code></td>
+<td><code>ls</code>的进阶版，相当于<code>ls -l</code>，可以打印文件及文件夹的详细信息</td>
+</tr>
+<tr>
+<td><code>pwd</code></td>
+<td>打印当前所在的目录</td>
+</tr>
+<tr>
+<td><code>cd</code></td>
+<td>例<code>cd /data</code>会进入<code>/data</code>目录，其中<code>/data</code>可以改为任意目录，以/开头的目录为绝对目录（会进入根目录的data文件夹），若要进入当前文件夹下的data目录命令<code>cd data</code>；<code>cd ..</code>会返回上一级目录</td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>应用部署</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>EICD系统服务器部署文档（CentOS离线安装）</title>
+    <url>/2022/08/31/EICD%E7%B3%BB%E7%BB%9F%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3%EF%BC%88CentOS%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><h2 id="安装包明细"><a href="#安装包明细" class="headerlink" title="安装包明细"></a>安装包明细</h2><figure class="highlight text"><table><tr><td class="code"><pre><span class="line">data</span><br><span class="line">  ├── java                                                </span><br><span class="line">  │     └── jdk-8u341-linux-x64.tar.gz                    // jdk压缩包</span><br><span class="line">  │</span><br><span class="line">  ├── mysql                                               </span><br><span class="line">  │     └── mysql-5.7.38-1.el7.x86_64.rpm-bundle.tar      // Mysql数据库程序包</span><br><span class="line">  │</span><br><span class="line">  ├── nacos                                               </span><br><span class="line">  │     └── nacos-server-2.0.3.tar.gz                     // Nacos程序包</span><br><span class="line">  │</span><br><span class="line">  ├── nginx                                               </span><br><span class="line">  │     └── nginx-1.22.0.tar.gz                           // Nginx程序包</span><br><span class="line">  │</span><br><span class="line">  ├── redis                                               </span><br><span class="line">  │     └── redis-6.2.7.tar.gz                            // Redis程序包</span><br><span class="line">  │</span><br><span class="line">  └── tools</span><br><span class="line">        ├── lsof-4.93.2-4.ky10.x86_64.rpm                 </span><br><span class="line">        ├── net-tools-2.0-0.54.ky10.x86_64.rpm            // 网络工具</span><br><span class="line">        ├── tar-1.32-2.ky10.x86_64.rpm                    // 解压工具</span><br><span class="line">        ├── telnet-0.17-76.ky10.x86_64.rpm                </span><br><span class="line">        └── vim-enhanced-8.2-34.p01.ky10.x86_64.rpm       // 文本编辑器</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p>将安装包上传到服务器上：</p>
+<h3 id="Windows用户操作步骤"><a href="#Windows用户操作步骤" class="headerlink" title="Windows用户操作步骤:"></a>Windows用户操作步骤:</h3><p>使用shell工具和ftp工具（推荐使用<code>Xshell</code>工具和<code>Xftp</code>工具），将文件上传到服务器<code>/</code>目录（由于篇幅有限，关于shell工具及ftp工具的使用，请自行查找资料）</p>
+<h3 id="Mac、Linux用户操作步骤，在用户本地电脑执行以下命令："><a href="#Mac、Linux用户操作步骤，在用户本地电脑执行以下命令：" class="headerlink" title="Mac、Linux用户操作步骤，在用户本地电脑执行以下命令："></a>Mac、Linux用户操作步骤，在用户本地电脑执行以下命令：</h3><figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">scp -r /data <span class="symbol">root@</span><span class="number">172.16</span><span class="number">.40</span><span class="number">.164</span>:/</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-r</td>
+<td>将文件夹内所有内容上传到服务器</td>
+</tr>
+<tr>
+<td>/data</td>
+<td>安装包目录位置</td>
+</tr>
+<tr>
+<td>root</td>
+<td>服务器登录账户</td>
+</tr>
+<tr>
+<td>172.16.40.164</td>
+<td>服务器IP地址</td>
+</tr>
+<tr>
+<td>/</td>
+<td>上传到服务器的目录</td>
+</tr>
+</tbody></table>
+<p>之后输入该用户登录密码（Linux系统命令行不会显示你输入的密码，但其实已经输入成功），按Enter键完成输入</p>
+<h2 id="安装常用工具"><a href="#安装常用工具" class="headerlink" title="安装常用工具"></a>安装常用工具</h2><blockquote>
+<p>若服务器安装操作系统时已经安装下列工具，可跳过此步骤</p>
+</blockquote>
+<p>进入常用工具文件夹</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">cd <span class="regexp">/data/</span>tools</span><br></pre></td></tr></table></figure>
+<p>分别执行以下命令，安装各个工具</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">rpm</span> -ivh tar-<span class="number">1</span>.<span class="number">32</span>-<span class="number">2</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh vim-enhanced-<span class="number">8</span>.<span class="number">2</span>-<span class="number">34</span>.p<span class="number">01</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh net-tools-<span class="number">2</span>.<span class="number">0</span>-<span class="number">0</span>.<span class="number">54</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh telnet-<span class="number">0</span>.<span class="number">17</span>-<span class="number">76</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh telnet-<span class="number">0</span>.<span class="number">17</span>-<span class="number">76</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh lsof-<span class="number">4</span>.<span class="number">93</span>.<span class="number">2</span>-<span class="number">4</span>.ky<span class="number">10</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h2><h3 id="登录服务器"><a href="#登录服务器" class="headerlink" title="登录服务器"></a>登录服务器</h3><figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">ssh <span class="symbol">root@</span><span class="number">172.16</span><span class="number">.40</span><span class="number">.164</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>root</td>
+<td>服务器登录账户</td>
+</tr>
+<tr>
+<td>172.16.40.164</td>
+<td>服务器IP地址</td>
+</tr>
+</tbody></table>
+<p>之后输入该用户登录密码（Linux系统命令行不会显示你输入的密码，但其实已经输入成功），按Enter键完成输入</p>
+<h3 id="新建用户-1"><a href="#新建用户-1" class="headerlink" title="新建用户"></a>新建用户</h3><p>添加一个名为comac的用户</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">adduser comac</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">passwd comac</span></span><br></pre></td></tr></table></figure>
+<p>根据提示，输入新的密码（Linux系统命令行不会显示你输入的密码）</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">更改用户 comac 的密码 。</span><br><span class="line">新的 密码：<span class="regexp">//</span>在这里输入新密码</span><br><span class="line">重新输入新的 密码：<span class="regexp">//</span>再次输入新密码</span><br><span class="line">passwd：所有的身份验证令牌已经成功更新。</span><br></pre></td></tr></table></figure>
+
+<h3 id="赋予sudo权限"><a href="#赋予sudo权限" class="headerlink" title="赋予sudo权限"></a>赋予sudo权限</h3><p>修改 /etc/sudoers 文件，找到下面一行，在root下面添加一行，如下所示：</p>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><span class="line"># Allow root <span class="keyword">to</span> run <span class="keyword">any</span> commands anywhere</span><br><span class="line">root      <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     <span class="keyword">ALL</span></span><br><span class="line">comac     <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)     NOPASSWD:<span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
+<p>以下以vim工具为例（vi/vim工具是Linux系统中最普及、最常用的文本编辑器，由于篇幅有限，不在本文教学，有兴趣可以在网上了解相关资料及教程）</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>sudoers</span><br></pre></td></tr></table></figure>
+<p>按下<code>i</code>键后进入编辑模式，修改完成后，按下<code>esc</code>键，输入<code>:wq!</code>后，按<code>Enter</code>键保存并退出</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>按下<code>i</code>键</td>
+<td>进入编辑器的编辑模式</td>
+</tr>
+<tr>
+<td>按下<code>esc</code>键，输入<code>:</code></td>
+<td>进入编辑器的指令模式</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>保存修改内容</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>退出</td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td>强制执行指令</td>
+</tr>
+</tbody></table>
+<h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">su comac</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：后续操作理论上都应该使用comac用户操作，过高的权限往往便随着更高的风险，能力越大责任越大</p>
+</blockquote>
+<h1 id="JDK安装"><a href="#JDK安装" class="headerlink" title="JDK安装"></a>JDK安装</h1><p>执行以下命令进入java文件夹</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">cd <span class="regexp">/data/</span>java</span><br></pre></td></tr></table></figure>
+
+<p>解压jdk压缩包</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">tar</span> -zxvf jdk-<span class="number">8</span>u<span class="number">341</span>-linux-x<span class="number">64</span>.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>编辑<code>/etc/profile</code>系统配置文件，将jdk添加到环境变量</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
+
+<p>按下<code>i</code>键后进入编辑模式，在配置文件末尾加上环境变量配置</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line"><span class="comment"># jdk的解压目录</span></span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">JAVA_HOME</span>=/data/java/jdk1.8.0_341</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">PATH</span>=<span class="variable">$PATH</span>:$JAVA_HOME/bin</span><br></pre></td></tr></table></figure>
+<p>修改完成后，按下<code>esc</code>键，输入<code>:wq</code>后，按<code>Enter</code>键保存并退出</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>按下<code>i</code>键</td>
+<td>进入编辑器的编辑模式</td>
+</tr>
+<tr>
+<td>按下<code>esc</code>键，输入<code>:</code></td>
+<td>进入编辑器的指令模式</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>保存修改内容</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>退出</td>
+</tr>
+</tbody></table>
+<p>刷新配置文件</p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line"><span class="keyword">source</span> <span class="regexp">/etc/</span>profile</span><br></pre></td></tr></table></figure>
+
+<p>验证</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure>
+<p>显示jdk版本信息即为成功</p>
+<h1 id="Mysql安装"><a href="#Mysql安装" class="headerlink" title="Mysql安装"></a>Mysql安装</h1><p>进入mysql文件夹，解压mysql程序包</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">cd</span> /data/mysql</span><br><span class="line"><span class="attribute">tar</span> -zxvf mysql-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm-bundle.tar</span><br></pre></td></tr></table></figure>
+<p>解压后依次安装rpm包，由于rpm包有安装顺序，依次按顺序执行安装</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">cd</span> mysql-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm-bundle/</span><br><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-common-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-libs-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-client-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br><span class="line"><span class="attribute">rpm</span> -ivh mysql-community-server-<span class="number">5</span>.<span class="number">7</span>.<span class="number">38</span>-<span class="number">1</span>.el<span class="number">7</span>.x<span class="number">86</span>_<span class="number">64</span>.rpm</span><br></pre></td></tr></table></figure>
+<p>配置my.cnf，开启表名忽略大小写(如果不需要此功能可以略过此步骤)</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">sudo vim <span class="regexp">/etc/my</span>.cnf</span><br></pre></td></tr></table></figure>
+
+<p>在<code>[mysqld]</code>下面加入：</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">lower_case_table_names</span>=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>启动mysql服务</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">sudo<span class="built_in"> service </span>mysqld start</span><br></pre></td></tr></table></figure>
+
+<p>登陆并修改密码  </p>
+<blockquote>
+<p>注意：初次安装好mysql server 5.7.x会随机生成root用户的登录密码，在修改root用户密码之前，不能进行任何有效操作，因此，需要使用控制台使用root用户登录并修改密码</p>
+</blockquote>
+<p>查看随机密码，执行以下命令，命令行会打印出mysql随机生成的root用户的登录密码</p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">sudo <span class="keyword">grep</span> <span class="string">&#x27;temporary password&#x27;</span> <span class="regexp">/var/</span>log/mysqld.log</span><br></pre></td></tr></table></figure>
+<p>登录mysql</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">mysql -uroot -p</span></span><br></pre></td></tr></table></figure>
+<p>之后输入该用户登录密码（Linux系统命令行不会显示你输入的密码，但其实已经输入成功），按Enter键完成输入</p>
+<p>登录成功后，使用命令修改密码，新密码请使用实际的密码替代：</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">alter<span class="built_in"> user </span>root@localhost identified by <span class="string">&#x27;新密码&#x27;</span>;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+
+<p>退出mysql</p>
+<figure class="highlight cos"><table><tr><td class="code"><pre><span class="line"><span class="keyword">quit</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><p>安装</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">cd</span> /data/redis</span><br><span class="line"><span class="attribute">tar</span> -zxvf redis-<span class="number">6</span>.<span class="number">2</span>.<span class="number">7</span>.tar.gz</span><br><span class="line"><span class="attribute">cd</span> /data/redis/redis-<span class="number">6</span>.<span class="number">2</span>.<span class="number">7</span></span><br><span class="line"><span class="attribute">make</span></span><br><span class="line"><span class="attribute">sudo</span> make install</span><br></pre></td></tr></table></figure>
+
+
+
+
+<p>将命令设置为全局</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">ln -s <span class="regexp">/usr/</span>local<span class="regexp">/redis/</span>redis-<span class="number">6.2</span>.<span class="number">7</span><span class="regexp">/src/</span>redis-server <span class="regexp">/usr/</span>bin/redis-server</span><br></pre></td></tr></table></figure>
+
+<p>启动验证</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">sudo redis-server <span class="regexp">/data/</span>redis<span class="regexp">/redis-6.2.7/</span>redis.conf &amp;</span><br></pre></td></tr></table></figure>
+
+<p>Redis配置和启动<br>使用编辑器打开Redis的配置文件（需要root权限，或sudo操作）：/data/redis/redis-6.2.7/redis.conf<br>根据实际情况修改以下内容：</p>
+<table>
+<thead>
+<tr>
+<th>修改前</th>
+<th>修改后</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>bind 127.0.0.1</code></td>
+<td><code># bind 127.0.0.1</code></td>
+<td>注释掉该行，取消只从本机访问的限制</td>
+</tr>
+<tr>
+<td><code># requirepass foobared</code></td>
+<td><code>requirepass 实际的密码</code></td>
+<td>“实际的密码“请根据实际情况进行配置，并取消该行的注释</td>
+</tr>
+</tbody></table>
+<h1 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h1><p>解压nacos</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">cd</span> /data/nacos</span><br><span class="line"><span class="attribute">tar</span> -zxvf nacos-server-<span class="number">2</span>.<span class="number">0</span>.<span class="number">3</span>.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>启动nacos服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">// 进入nacos执行程序目录</span><br><span class="line"><span class="built_in">cd</span> /data/nacos/nacos-server-2.0.3/bin</span><br><span class="line"></span><br><span class="line">// 启动</span><br><span class="line">./startup.sh -m standalone &amp;</span><br></pre></td></tr></table></figure>
+
+<p>Nacos的使用</p>
+<p>想要登录nacos需要开放服务器防火墙的<code>8848</code>端口，具体操作见防火墙章节</p>
+<p>开通<code>8848</code>端口后，在用户本地的浏览器访问<code>http://localhost:8848/nacos</code>，其中<code>localhost</code>请改为实际服务器IP</p>
+<p>随后输入账号密码登录<br>默认账号、密码分别为<code>nacos</code>，<code>nacos</code></p>
+<h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><p>安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /data/nginx</span><br><span class="line">tar -zxvf nginx-1.22.0.tar.gz</span><br><span class="line">cd nginx-1.22.0</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br><span class="line">sudo ln -s /usr/local/nginx/sbin/nginx /usr/bin/nginx</span><br></pre></td></tr></table></figure>
+
+<p>验证，显示nginx的版本号即为成功</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx -v</span><br></pre></td></tr></table></figure>
+
+<p>启动</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo nginx</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="应用程序安装"><a href="#应用程序安装" class="headerlink" title="应用程序安装"></a>应用程序安装</h1><h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><p>登录mysql</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">mysql -uroot -p</span></span><br></pre></td></tr></table></figure>
+<p>之后输入该用户登录密码（Linux系统命令行不会显示你输入的密码，但其实已经输入成功），按Enter键完成输入</p>
+<p>创建业务数据库</p>
+<figure class="highlight n1ql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">schema</span> eicd_system <span class="keyword">collate</span> utf8_general_ci;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>eicd_system</td>
+<td>新建数据库名</td>
+</tr>
+<tr>
+<td>utf8_general_ci</td>
+<td>数据所用字符集</td>
+</tr>
+</tbody></table>
+<p>切换到新创建的数据库</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">eicd_system</span>;</span><br></pre></td></tr></table></figure>
+
+<p>导入业务数据库</p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line"><span class="keyword">source</span> <span class="regexp">/data/</span>eicd<span class="regexp">/server/</span>sql/eicd_system.sql;</span><br></pre></td></tr></table></figure>
+
+<p>检查执行结果</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">tables</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h2><h3 id="Nacos配置修改"><a href="#Nacos配置修改" class="headerlink" title="Nacos配置修改"></a>Nacos配置修改</h3><p>登录Nacos后，在<code>配置管理</code>-&gt;<code>配置列表</code>模块中添加配置</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>eicd-service-dev.yml</td>
+<td>系统核心模块配置</td>
+</tr>
+</tbody></table>
+<!-- eicd-gateway-int.yml|网关配置 -->
+<!-- eicd-auth-int.yml|权限中心配置 -->
+
+<p>配置具体内容在/eicd/server/nacos_config目录下，注意需要根据实际情况修改</p>
+<figure class="highlight dts"><table><tr><td class="code"><pre><span class="line"><span class="symbol">redis:</span></span><br><span class="line"><span class="symbol">  host:</span> localhost</span><br><span class="line"><span class="symbol">  port:</span> <span class="number">6379</span></span><br><span class="line"><span class="symbol">  password:</span> <span class="comment">// Redis的实际密码，若未设密码则不填</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">datasource:</span><br><span class="line">  # 主库数据源</span><br><span class="line">  master:</span><br><span class="line">    driver-class-name: com.mysql.cj.jdbc.Driver</span><br><span class="line">    url: jdbc:mysql://localhost:<span class="number">3306</span>/eicd_system?useUnicode=<span class="literal">true</span>&amp;characterEncoding=utf8&amp;zeroDateTimeBehavior=convertToNull&amp;useSSL=<span class="literal">true</span>&amp;serverTimezone=GMT%<span class="number">2B8</span></span><br><span class="line">    username: root     // 数据库的登录账户</span><br><span class="line">    password: <span class="number">123456</span>   // 数据库实际密码</span><br></pre></td></tr></table></figure>
+<p>其中eicd_system改为实际的数据库名</p>
+<p>配置格式勾选YAML后发布</p>
+<h3 id="启动应用服务"><a href="#启动应用服务" class="headerlink" title="启动应用服务"></a>启动应用服务</h3><blockquote>
+<p>后端引用服务使用maven打包，Maven官网下载对应版本的bin包：<a href="https://maven.apache.org/download.cgi%EF%BC%8C%E6%8E%A8%E8%8D%903.6.3%E7%89%88%E6%9C%AC">https://maven.apache.org/download.cgi，推荐3.6.3版本</a><br>将包上传至服务器<code>/data/eicd/server/system</code>目录</p>
+</blockquote>
+<p>启动核心应用服务</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">cd /data/eicd/server/system</span><br><span class="line">nohup java -Xms512m -Xmx1g -XX:<span class="attribute">MetaspaceSize</span>=128m -XX:<span class="attribute">MaxMetaspaceSize</span>=512m -Dfile.<span class="attribute">encoding</span>=utf-8 -Dlog.<span class="attribute">path</span>=./logs -jar eicd-service-1.0-SNAPSHOT-exe.jar &gt;/dev/<span class="literal">null</span> 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nohup java</td>
+<td>后台启动java程序</td>
+</tr>
+<tr>
+<td>-Xms512m -Xmx1g -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=512m -Dfile.encoding=utf-8 -Dlog.path=./logs</td>
+<td>jvm启动参数</td>
+</tr>
+<tr>
+<td>-jar</td>
+<td>以jar包形式启动</td>
+</tr>
+<tr>
+<td>eicd-service-1.0-SNAPSHOT-exe.jar</td>
+<td>应用程序打包文件名称，以实际为准</td>
+</tr>
+<tr>
+<td>&gt;/dev/null 2&gt;&amp;1 &amp;</td>
+<td>关闭程序运行中的内容输出</td>
+</tr>
+</tbody></table>
+<p>可以登录nacos后在<code>服务管理</code>-&gt;<code>服务列表</code>中查看服务是否启动成功</p>
+<h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><blockquote>
+<p>通过node.js将前端程序打包<br>将包上传至服务器<code>/data/eicd/web</code>目录</p>
+</blockquote>
+<p>修改Nginx配置文件</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">vim <span class="regexp">/usr/</span>local<span class="regexp">/nginx/</span>conf/nginx.conf</span><br></pre></td></tr></table></figure>
+
+<p>修改内容如下：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">listen       <span class="number">80</span>;                       <span class="regexp">//</span> 浏览器访问的端口</span><br><span class="line"></span><br><span class="line">upstream eicd_server &#123;</span><br><span class="line">    server localhost:<span class="number">18081</span>;</span><br><span class="line">    ip_hash;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location / &#123;</span><br><span class="line">    root   <span class="regexp">/data/</span>eicd<span class="regexp">/web/</span>dist;        <span class="regexp">//</span> 前端代码所在目录</span><br><span class="line">    index  index.html index.htm;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="regexp">//</span> 添加以下代理配置</span><br><span class="line">location ^~<span class="regexp">/prod-api/</span> &#123;</span><br><span class="line">    proxy_pass              http:<span class="regexp">//</span><span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">8080</span>/;</span><br><span class="line">    proxy_http_version      <span class="number">1.1</span>;</span><br><span class="line">    proxy_set_header        Upgrade         <span class="variable">$http_upgrade</span>;</span><br><span class="line">    proxy_set_header        Connection      <span class="string">&quot;upgrade&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重写启动Nginx</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">sudo nginx -s reload</span></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h1><p>开启防火墙 </p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line">systemctl <span class="literal">start</span> firewalld</span><br></pre></td></tr></table></figure>
+
+<p>开放指定端口</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-port</span>=80/tcp --permanent</span><br></pre></td></tr></table></figure>
+<p>命令含义：<br>–zone #作用域<br>–add-port=80/tcp  #添加端口，格式为：端口/通讯协议<br>–permanent  #永久生效，没有此参数重启后失效  </p>
+<p>重启防火墙</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --reload</span></span><br></pre></td></tr></table></figure>
+<p>查看端口号</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line"><span class="regexp">//</span>查看当前所有tcp端口</span><br><span class="line"></span><br><span class="line">netstat -ntlp</span><br><span class="line"></span><br><span class="line"><span class="regexp">//</span>查看所有<span class="number">1935</span>端口使用情况</span><br><span class="line">netstat -ntulp |grep <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="Linux系统的一些常用命令"><a href="#Linux系统的一些常用命令" class="headerlink" title="Linux系统的一些常用命令"></a>Linux系统的一些常用命令</h1><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ls</code></td>
+<td>打印当前目录的文件及文件夹</td>
+</tr>
+<tr>
+<td><code>ll</code></td>
+<td><code>ls</code>的进阶版，相当于<code>ls -l</code>，可以打印文件及文件夹的详细信息</td>
+</tr>
+<tr>
+<td><code>pwd</code></td>
+<td>打印当前所在的目录</td>
+</tr>
+<tr>
+<td><code>cd</code></td>
+<td>例<code>cd /data</code>会进入<code>/data</code>目录，其中<code>/data</code>可以改为任意目录，以/开头的目录为绝对目录（会进入根目录的data文件夹），若要进入当前文件夹下的data目录命令<code>cd data</code>；<code>cd ..</code>会返回上一级目录</td>
+</tr>
+</tbody></table>
+]]></content>
+      <tags>
+        <tag>应用部署</tag>
       </tags>
   </entry>
 </search>
